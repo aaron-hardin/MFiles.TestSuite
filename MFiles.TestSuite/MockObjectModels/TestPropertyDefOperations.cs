@@ -1,0 +1,85 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using MFilesAPI;
+
+namespace VaultMockObjects.MockObjectModels
+{
+    public class TestPropertyDefOperations : VaultPropertyDefOperations
+    {
+        private TestVault vault;
+
+        public TestPropertyDefOperations(TestVault vault)
+        {
+            this.vault = vault;
+        }
+
+        public PropertyDefAdmin AddPropertyDefAdmin(PropertyDefAdmin PropertyDefAdmin, TypedValue ResetLastUsedValue = null)
+        {
+            // TODO: use arguments
+            // TODO: error checking
+            this.vault.propertyDefs.Add(PropertyDefAdmin);
+            return PropertyDefAdmin;
+        }
+
+        public PropertyDef GetBuiltInPropertyDef(MFBuiltInPropertyDef PropertyDefType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PropertyDef GetPropertyDef(int PropertyDef)
+        {
+            PropertyDefAdmin pda = this.vault.propertyDefs.SingleOrDefault(pdef => pdef.PropertyDef.ID == PropertyDef);
+            return pda == null ? null : pda.PropertyDef;
+        }
+
+        public PropertyDefAdmin GetPropertyDefAdmin(int PropertyDef)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetPropertyDefIDByAlias(string Alias)
+        {
+            try
+            {
+                return this.vault.propertyDefs.Single(pdef => pdef.SemanticAliases.Value.Contains(Alias)).PropertyDef.ID;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
+        public int GetPropertyDefIDByGUID(string PropertyDefGUID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PropertyDefs GetPropertyDefs()
+        {
+            throw new NotImplementedException();
+        }
+
+        public PropertyDefsAdmin GetPropertyDefsAdmin()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemovePropertyDefAdmin(int PropertyDef, bool CopyToAnotherPropertyDef = false, int TargetPropertyDef = 0, bool Append = false, bool DeleteFromClassesIfNecessary = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdatePropertyDefAdmin(PropertyDefAdmin PropertyDefAdmin, TypedValue ResetLastUsedValue = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdatePropertyDefWithAutomaticPermissionsAdmin(PropertyDefAdmin PropertyDefAdmin, TypedValue ResetLastUsedValue = null, bool AutomaticPermissionsForcedActive = false)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
