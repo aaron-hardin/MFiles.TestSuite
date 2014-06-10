@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using MFilesAPI;
 
-namespace VaultMockObjects.MockObjectModels
+namespace MFiles.TestSuite.MockObjectModels
 {
     public class TestPropertyDefOperations : VaultPropertyDefOperations
     {
@@ -31,6 +31,9 @@ namespace VaultMockObjects.MockObjectModels
 
         public PropertyDef GetPropertyDef(int PropertyDef)
         {
+            // TODO: verify functionality
+            if(PropertyDef < 0)
+                throw new IndexOutOfRangeException("ID out of range");
             PropertyDefAdmin pda = this.vault.propertyDefs.SingleOrDefault(pdef => pdef.PropertyDef.ID == PropertyDef);
             return pda == null ? null : pda.PropertyDef;
         }

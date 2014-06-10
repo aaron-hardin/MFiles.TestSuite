@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace VaultMockObjects.ComModels
+namespace MFiles.TestSuite.ComModels
 {
     public class VaultJSON
     {

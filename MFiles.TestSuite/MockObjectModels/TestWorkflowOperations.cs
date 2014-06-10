@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using MFilesAPI;
 
-namespace VaultMockObjects.MockObjectModels
+namespace MFiles.TestSuite.MockObjectModels
 {
     public class TestWorkflowOperations : VaultWorkflowOperations
     {

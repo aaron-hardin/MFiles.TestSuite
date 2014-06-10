@@ -7,8 +7,8 @@
     <ProjectGuid>{1E9F8E88-44D0-4385-904F-CD12FB6EC480}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VaultMockObjects</RootNamespace>
-    <AssemblyName>VaultMockObjects</AssemblyName>
+    <RootNamespace>MFiles.TestSuite</RootNamespace>
+    <AssemblyName>MFiles.TestSuite</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

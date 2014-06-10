@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using MFilesAPI;
 
-namespace VaultMockObjects.ComModels
+namespace MFiles.TestSuite.ComModels
 {
     public class xExpression
     {

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using MFiles.TestSuite.ComModels;
 using MFilesAPI;
-using VaultMockObjects.ComModels;
 
-namespace VaultMockObjects.MockObjectModels
+namespace MFiles.TestSuite.MockObjectModels
 {
     public class TestSearchCondition : SearchCondition
     {

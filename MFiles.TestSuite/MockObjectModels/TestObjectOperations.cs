@@ -6,7 +6,7 @@ using System.Text;
 using MFilesAPI;
 using VaultMockObjects.VaultExtensions;
 
-namespace VaultMockObjects.MockObjectModels
+namespace MFiles.TestSuite.MockObjectModels
 {
     public class TestObjectOperations : VaultObjectOperations
     {
