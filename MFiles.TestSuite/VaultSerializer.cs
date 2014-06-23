@@ -18,8 +18,10 @@ namespace MFiles.TestSuite
             var objects = new List<xObjTypeAdmin>();
             foreach (ObjTypeAdmin item in vaultOTs)
             {
-                //if(!item.ObjectType.RealObjectType)
-                //    continue; // TODO: maybe??
+                if(!item.ObjectType.RealObjectType)
+                    continue; // TODO: maybe??
+                if(objects.Count(obj => obj.ObjectType.ID == item.ObjectType.ID) > 0)
+                    throw new Exception("Already added that one.");
                 objects.Add(new xObjTypeAdmin(item));                
             }
 
@@ -56,6 +58,13 @@ namespace MFiles.TestSuite
             var valueLists = new List<xObjType>();
             foreach (ObjType item in vaultVl)
             {
+                // TODO: temp fix
+                if(item.RealObjectType)
+                    continue;
+                if (valueLists.Count(obj => obj.ID == item.ID) > 0)
+                    throw new Exception("Already added that one.");
+                if(item.ID == 142)
+                    throw new Exception("hi");
                 valueLists.Add(new xObjType(item));                
             }
             return JsonConvert.SerializeObject(valueLists);

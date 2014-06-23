@@ -10,8 +10,6 @@ namespace MFiles.TestSuite
 {
     public class StructureGenerator
     {
-        // TODO: placeholder
-
         public static void VaultToJsonFile(Vault vault, string path)
         {
             string json = VaultToJson(vault);

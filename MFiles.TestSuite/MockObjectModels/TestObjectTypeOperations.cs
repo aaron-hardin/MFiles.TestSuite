@@ -36,7 +36,11 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public ObjType GetObjectType(int ObjectType)
         {
-            throw new NotImplementedException();
+            List<ObjTypeAdmin> objectTypes = vault.objTypes.Where(obj => obj.ObjectType.ID == ObjectType).ToList();
+            if(objectTypes.Count > 1)
+                throw new Exception("hi");
+            ObjTypeAdmin ota = vault.objTypes.SingleOrDefault(obj => obj.ObjectType.ID == ObjectType);
+            return ota == null ? null : ota.ObjectType;
         }
 
         public ObjTypeAdmin GetObjectTypeAdmin(int ObjectType)

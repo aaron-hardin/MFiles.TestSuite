@@ -105,6 +105,12 @@ namespace MFiles.TestSuite.MockObjectModels
         {
             // TODO: use arguments
             // TODO: error checking
+            foreach (PropertyValue propertyValue in PropertyValues)
+            {
+                if(vault.propertyDefs.SingleOrDefault(prop => prop.PropertyDef.ID == propertyValue.PropertyDef) == null)
+                    throw new Exception(string.Format("Property does not exist. ({0})", propertyValue.PropertyDef));
+            }
+
             List<ObjectVersionAndProperties> thisObj =
                 this.vault.ovaps.Where(obj => obj.ObjVer.ID == ObjVer.ID && obj.ObjVer.Type == ObjVer.Type).ToList();
             if(thisObj.Count == 0)

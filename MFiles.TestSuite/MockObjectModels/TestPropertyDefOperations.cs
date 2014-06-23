@@ -47,7 +47,9 @@ namespace MFiles.TestSuite.MockObjectModels
         {
             try
             {
-                return this.vault.propertyDefs.Single(pdef => pdef.SemanticAliases.Value.Contains(Alias)).PropertyDef.ID;
+                // TODO: check all properties that use alias, following does not work
+                //return this.vault.propertyDefs.Single(pdef => pdef.SemanticAliases.Value.Contains(Alias)).PropertyDef.ID;
+                return this.vault.propertyDefs.Single(pdef => pdef.SemanticAliases.Value.Split(';').Contains(Alias)).PropertyDef.ID;
             }
             catch
             {
