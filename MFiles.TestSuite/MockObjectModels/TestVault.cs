@@ -9,12 +9,12 @@ namespace MFiles.TestSuite.MockObjectModels
 {
     public class TestVault : Vault
     {
-        public List<ObjectVersionAndProperties> ovaps = new List<ObjectVersionAndProperties>(); 
-        public List<ValueListItem> valueListItems = new List<ValueListItem>(); 
-        public List<ObjTypeAdmin> objTypes = new List<ObjTypeAdmin>();
-        public List<PropertyDefAdmin> propertyDefs = new List<PropertyDefAdmin>();
-        public List<WorkflowAdmin> workflows = new List<WorkflowAdmin>();
-        public List<ObjectClassAdmin> classes = new List<ObjectClassAdmin>();
+        public IList<ObjectVersionAndProperties> ovaps = new List<ObjectVersionAndProperties>(); 
+        public IList<ValueListItem> valueListItems = new List<ValueListItem>(); 
+        public IList<ObjTypeAdmin> objTypes = new List<ObjTypeAdmin>();
+        public IList<PropertyDefAdmin> propertyDefs = new List<PropertyDefAdmin>();
+        public IList<WorkflowAdmin> workflows = new List<WorkflowAdmin>();
+        public IList<ObjectClassAdmin> classes = new List<ObjectClassAdmin>();
         public Dictionary<string, NamedValues> namedValues = new Dictionary<string, NamedValues>();
 
         private VaultObjectOperations objectOperations;
