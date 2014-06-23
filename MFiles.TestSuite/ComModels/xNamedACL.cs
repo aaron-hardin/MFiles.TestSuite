@@ -15,13 +15,17 @@ namespace MFiles.TestSuite.ComModels
         public string Name { get; set; }
         public int NamedACLType { get; set; }
 
+        public xNamedACL()
+        {
+        }
+
         public xNamedACL(NamedACL namedAcl)
         {
-            this.AccessControlList = new xAccessControlList(namedAcl.AccessControlList);
-            this.GUID = namedAcl.GUID;
-            this.ID = namedAcl.ID;
-            this.Name = namedAcl.Name;
-            this.NamedACLType = (int) namedAcl.NamedACLType;
+            AccessControlList = new xAccessControlList(namedAcl.AccessControlList);
+            GUID = namedAcl.GUID;
+            ID = namedAcl.ID;
+            Name = namedAcl.Name;
+            NamedACLType = (int) namedAcl.NamedACLType;
         }
     }
 }

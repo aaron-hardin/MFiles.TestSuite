@@ -147,7 +147,12 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public bool ObjectCheckedOut
         {
-            get { throw new NotImplementedException(); }
+            // TODO: fix this
+            get
+            {
+                Random rand = new Random();
+                return rand.Next(2) == 0;
+            }
         }
 
         public bool ObjectCheckedOutToThisUser
