@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using MFiles.TestSuite.ComModels;
 using MFilesAPI;
+using Newtonsoft.Json;
 
 namespace MFiles.TestSuite.MockObjectModels
 {
@@ -37,6 +40,69 @@ namespace MFiles.TestSuite.MockObjectModels
             //// Put the collection back to the vaule.
             //this.NamedValueStorageOperations.SetNamedValues(MFNamedValueType.MFConfigurationValue, approvalModuleConfigKey, namedValues);
 
+        }
+
+        public static TestVault FromFile(string path)
+        {
+            using(Stream stream = File.OpenRead(path))
+            {
+                return FromStream(stream);
+            }
+        }
+
+        public static TestVault Default()
+        {
+            
+            Assembly assembly = Assembly.GetAssembly(typeof(StructureGenerator));
+            string structureJson = typeof(StructureGenerator).Namespace + "." + "VaultStructure.json";
+            using (Stream stream = assembly.GetManifestResourceStream(structureJson))
+            {
+                return FromStream(stream);
+            }
+        }
+
+        public static TestVault FromStream(Stream stream)
+        {
+            TestVault testVault = new TestVault();
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                string serialized = reader.ReadToEnd();
+                VaultJSON vaultJson = JsonConvert.DeserializeObject<VaultJSON>(serialized);
+                List<xObjTypeAdmin> objects = JsonConvert.DeserializeObject<List<xObjTypeAdmin>>(vaultJson.Objects);
+                foreach (xObjTypeAdmin obj in objects)
+                {
+                    testVault.objTypes.Add(new TestObjTypeAdmin(obj));
+                }
+
+                List<xPropertyDefAdmin> properties = JsonConvert.DeserializeObject<List<xPropertyDefAdmin>>(vaultJson.Properties);
+                foreach (xPropertyDefAdmin pda in properties)
+                {
+                    testVault.propertyDefs.Add(new TestPropertyDefAdmin(pda));
+                }
+
+                List<xObjectClassAdmin> classes = JsonConvert.DeserializeObject<List<xObjectClassAdmin>>(vaultJson.Classes);
+                foreach (xObjectClassAdmin oClass in classes)
+                {
+                    testVault.classes.Add(new TestObjectClassAdmin(oClass));
+                }
+
+                List<xObjType> valueLists = JsonConvert.DeserializeObject<List<xObjType>>(vaultJson.ValueLists);
+                foreach (xObjType valueList in valueLists)
+                {
+                    TestObjType ot = new TestObjType(valueList);
+                    TestObjTypeAdmin ota = new TestObjTypeAdmin { ObjectType = ot };
+                    testVault.objTypes.Add(ota);
+                }
+
+                List<xWorkflowAdmin> workflows = JsonConvert.DeserializeObject<List<xWorkflowAdmin>>(vaultJson.Workflows);
+                foreach (xWorkflowAdmin workflow in workflows)
+                {
+                    //testVault.workflows.Add(new TestWorkflowAdmin(workflow));
+                    testVault.WorkflowOperations.AddWorkflowAdmin(new TestWorkflowAdmin(workflow));
+                }
+            }
+
+            return testVault;
         }
 
         private static string GetDefaultConfiguration(string configKey)
