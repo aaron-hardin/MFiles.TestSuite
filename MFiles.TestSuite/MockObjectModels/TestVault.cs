@@ -24,6 +24,7 @@ namespace MFiles.TestSuite.MockObjectModels
         private VaultClassOperations classOperations;
         private VaultObjectPropertyOperations objectPropertyOperations;
         private VaultValueListItemOperations valueListItemOperations;
+        private VaultObjectSearchOperations objectSearchOperations;
         private VaultObjectTypeOperations objectTypeOperations;
         private VaultPropertyDefOperations propertyDefOperations;
         private VaultWorkflowOperations workflowOperations;
@@ -275,7 +276,7 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public VaultObjectSearchOperations ObjectSearchOperations
         {
-            get { throw new NotImplementedException(); }
+            get { return this.objectSearchOperations ?? (this.objectSearchOperations = new TestObjectSearchOperations(this)); }
         }
 
         public VaultObjectTypeOperations ObjectTypeOperations

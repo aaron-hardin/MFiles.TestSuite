@@ -108,6 +108,7 @@
     <Compile Include="MockObjectModels\TestObjectClassAdmin.cs" />
     <Compile Include="MockObjectModels\TestObjectOperations.cs" />
     <Compile Include="MockObjectModels\TestObjectPropertyOperations.cs" />
+    <Compile Include="MockObjectModels\TestObjectSearchOperations.cs" />
     <Compile Include="MockObjectModels\TestObjectTypeOperations.cs" />
     <Compile Include="MockObjectModels\TestObjectTypeTargetForBrowsing.cs" />
     <Compile Include="MockObjectModels\TestObjectVersion.cs" />
