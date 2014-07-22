@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using MFilesAPI;
 
 namespace MFiles.TestSuite.MockObjectModels
@@ -44,7 +40,7 @@ namespace MFiles.TestSuite.MockObjectModels
         public ObjectVersion Clone()
         {
             // TODO: far from comprehensive
-            TestObjectVersion clone = new TestObjectVersion { ObjVer = this.ObjVer.Clone() };
+            TestObjectVersion clone = new TestObjectVersion { ObjVer = ObjVer.Clone() };
             return clone;
         }
 
@@ -78,12 +74,12 @@ namespace MFiles.TestSuite.MockObjectModels
             get { throw new NotImplementedException(); }
         }
 
-        public string GetNameForFileSystem(bool IncludeID = true)
+        public string GetNameForFileSystem(bool includeID = true)
         {
             throw new NotImplementedException();
         }
 
-        public string GetNameForFileSystemEx(bool IncludeID = true, bool UseOriginalID = false)
+        public string GetNameForFileSystemEx(bool includeID = true, bool useOriginalID = false)
         {
             throw new NotImplementedException();
         }

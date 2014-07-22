@@ -113,6 +113,7 @@
     <Compile Include="MockObjectModels\TestObjectTypeTargetForBrowsing.cs" />
     <Compile Include="MockObjectModels\TestObjectVersion.cs" />
     <Compile Include="MockObjectModels\TestObjectVersionAndProperties.cs" />
+    <Compile Include="MockObjectModels\TestObjectVersions.cs" />
     <Compile Include="MockObjectModels\TestObjType.cs" />
     <Compile Include="MockObjectModels\TestObjTypeAdmin.cs" />
     <Compile Include="MockObjectModels\TestObjTypeColumnMapping.cs" />

@@ -317,10 +317,10 @@ namespace MFiles.TestSuite.MockObjectModels
                 }
             }
 
-            ObjectVersions objectVersions = new ObjectVersions();
+			TestObjectVersions objectVersions = new TestObjectVersions();
             foreach (ObjectVersion objectVersion in relationships)
             {
-                objectVersions.Add(-1, objectVersion);
+				objectVersions.Add(-1, objectVersion);
             }
 
             return objectVersions;
