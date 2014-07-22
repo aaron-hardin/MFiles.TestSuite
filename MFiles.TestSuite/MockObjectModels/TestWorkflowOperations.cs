@@ -41,7 +41,8 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public WorkflowAdmin GetWorkflowAdmin(int WorkflowID)
         {
-            throw new NotImplementedException();
+	        return vault.workflows.SingleOrDefault(wf => wf.Workflow.ID == WorkflowID);
+            // TODO: verify
         }
 
         public Workflow GetWorkflowForClient(int WorkflowID, bool UpdateFromServer = false)

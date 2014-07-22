@@ -15,7 +15,6 @@ namespace MFiles.TestSuite.MockObjectModels
         {
             TestObjectVersionAndProperties clone = new TestObjectVersionAndProperties
             {
-                ObjVer = this.ObjVer.Clone(),
                 Properties = this.Properties.Clone(),
                 Vault = this.Vault,
                 VersionData = this.VersionData.Clone()
@@ -23,7 +22,9 @@ namespace MFiles.TestSuite.MockObjectModels
             return clone;
         }
 
-        public ObjVer ObjVer { get; set; }
+        public ObjVer ObjVer {
+	        get { return VersionData.ObjVer; }
+        }
 
         public PropertyValues Properties
         {

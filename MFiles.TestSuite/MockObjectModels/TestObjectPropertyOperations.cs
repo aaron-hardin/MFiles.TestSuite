@@ -120,11 +120,11 @@ namespace MFiles.TestSuite.MockObjectModels
             if(ObjVer.Version != -1 && ObjVer.Version != maxVersion)
                 throw new Exception("Invalid version");
             TestObjectVersionAndProperties current =
-                (TestObjectVersionAndProperties) thisObj.Single(obj => obj.ObjVer.Version == maxVersion).Clone();
+                (TestObjectVersionAndProperties) thisObj.Single(obj => obj.ObjVer.Version == maxVersion);//.Clone();
             
-            current.ObjVer.Version += 1;
+            //current.ObjVer.Version += 1;
             current.Properties = PropertyValues;
-            this.vault.ovaps.Add(current);
+          //  this.vault.ovaps.Add(current);
             return current;
         }
 

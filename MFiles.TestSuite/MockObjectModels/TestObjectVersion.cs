@@ -5,6 +5,18 @@ namespace MFiles.TestSuite.MockObjectModels
 {
     public class TestObjectVersion : ObjectVersion
     {
+	    private readonly bool checkedOut;
+
+		internal TestObjectVersion(bool checkedOut)
+		{
+			this.checkedOut = checkedOut;
+		}
+
+		public TestObjectVersion()
+		{
+
+		}
+
         public DateTime AccessedByMeUtc
         {
             get { throw new NotImplementedException(); }
@@ -144,11 +156,10 @@ namespace MFiles.TestSuite.MockObjectModels
         public bool ObjectCheckedOut
         {
             // TODO: fix this
-            get
-            {
-                Random rand = new Random();
-                return rand.Next(2) == 0;
-            }
+            get 
+			{
+				return checkedOut;
+			}
         }
 
         public bool ObjectCheckedOutToThisUser

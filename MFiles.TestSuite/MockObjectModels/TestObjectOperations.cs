@@ -39,7 +39,10 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public ObjectVersion CheckIn(ObjVer ObjVer)
         {
-            throw new NotImplementedException();
+			// TODO: implement
+            //throw new NotImplementedException();
+			ObjectVersionAndProperties ovap = GetLatestObjectVersionAndProperties( ObjVer.ObjID, false );
+	        return ovap.VersionData;
         }
 
         public ObjectVersions CheckInMultipleObjects(ObjVers ObjVers)
@@ -49,7 +52,13 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public ObjectVersion CheckOut(ObjID ObjID)
         {
-            throw new NotImplementedException();
+            // TODO: finish method
+	        ObjectVersionAndProperties ovap = GetLatestObjectVersionAndProperties( ObjID, false );
+	        ObjectVersionAndProperties newVersion = ovap.Clone();
+	        newVersion.VersionData.ObjVer.Version++;
+	        vault.checkedOut.Add( newVersion.ObjVer.ObjID );
+			vault.ovaps.Add( newVersion );
+	        return newVersion.VersionData;
         }
 
         public ObjectVersions CheckOutMultipleObjects(ObjIDs ObjIDs)
@@ -82,7 +91,6 @@ namespace MFiles.TestSuite.MockObjectModels
             };
 	        TestObjectVersionAndProperties ovap = new TestObjectVersionAndProperties
             {
-                ObjVer = objectVersion.ObjVer,
                 Properties = PropertyValues,
                 Vault = this.vault,
                 VersionData = objectVersion

@@ -12,6 +12,7 @@ namespace MFiles.TestSuite.MockObjectModels
 {
     public class TestVault : Vault
     {
+		public IList<ObjID> checkedOut = new List<ObjID>(); 
         public IList<ObjectVersionAndProperties> ovaps = new List<ObjectVersionAndProperties>(); 
         public IList<ValueListItem> valueListItems = new List<ValueListItem>(); 
         public IList<ObjTypeAdmin> objTypes = new List<ObjTypeAdmin>();
