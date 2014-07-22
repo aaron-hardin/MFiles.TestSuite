@@ -77,10 +77,10 @@ namespace MFiles.TestSuite.MockObjectModels
                 maxId = objThisType.Max(obj => obj.ObjVer.ID);
             TestObjectVersion objectVersion = new TestObjectVersion
             {
-                ObjVer = new ObjVer { Type = ObjectType, ID = maxId, Version = 1}
+	            ObjVer = new ObjVer { Type = ObjectType, ID = maxId + 1, Version = 1 },
+	            Class = PropertyValues.SearchForProperty( 100 ).Value.GetLookupID()
             };
-            objectVersion.Class = PropertyValues.SearchForProperty(100).Value.GetLookupID();
-            TestObjectVersionAndProperties ovap = new TestObjectVersionAndProperties
+	        TestObjectVersionAndProperties ovap = new TestObjectVersionAndProperties
             {
                 ObjVer = objectVersion.ObjVer,
                 Properties = PropertyValues,
