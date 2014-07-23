@@ -12,6 +12,8 @@ namespace MFiles.TestSuite.ComModels
         public int ID { get; set; }
         public bool PropertyDef { get; set; }
 
+		public xPropertyDefOrObjectType() { }
+
         public xPropertyDefOrObjectType(PropertyDefOrObjectType pdot)
         {
             this.ID = pdot.ID;
