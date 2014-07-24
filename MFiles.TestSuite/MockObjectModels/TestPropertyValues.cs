@@ -11,15 +11,23 @@ namespace MFiles.TestSuite.MockObjectModels
     {
         private List<TestPropertyValue> properties = new List<TestPropertyValue>();
 
-        public void Add(int Index, PropertyValue PropertyValue)
+        public void Add(int Index, PropertyValue propertyValue)
         {
             // TODO: how to handle index?
-            this.properties.Add((TestPropertyValue)PropertyValue);
+			TestPropertyValue pval = new TestPropertyValue();
+	        pval.PropertyDef = propertyValue.PropertyDef;
+	        pval.TypedValue = propertyValue.Value;
+            this.properties.Add(pval);
         }
 
         public PropertyValues Clone()
         {
-            throw new NotImplementedException();
+			TestPropertyValues values = new TestPropertyValues();
+	        foreach( TestPropertyValue testPropertyValue in properties )
+	        {
+		        values.Add( -1, testPropertyValue.Clone() );
+	        }
+	        return values;
         }
 
         public int Count
@@ -29,7 +37,7 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public System.Collections.IEnumerator GetEnumerator()
         {
-            throw new NotImplementedException();
+	        return properties.GetEnumerator();
         }
 
         public int IndexOf(int PropertyDef)
@@ -42,9 +50,9 @@ namespace MFiles.TestSuite.MockObjectModels
             return -1;
         }
 
-        public void Remove(int Index)
+        public void Remove(int index)
         {
-            throw new NotImplementedException();
+			properties.RemoveAt( index  );
         }
 
         public PropertyValue SearchForProperty(int PropertyDef)
@@ -57,15 +65,31 @@ namespace MFiles.TestSuite.MockObjectModels
             return null;
         }
 
-        public PropertyValue this[int Index]
+		public PropertyValue this[ int index ]
         {
             get
             {
-                throw new NotImplementedException();
+	            return properties[ index ];
             }
             set
             {
-                throw new NotImplementedException();
+				if(index == -1)
+				{
+					Add( -1, value );
+				}
+				if(index > properties.Count)
+				{
+					throw new Exception("Index out of range.");
+				}
+				if(index == properties.Count)
+				{
+					Add( -1, value );
+				}
+				else
+				{
+					properties.RemoveAt( index );
+					Add( -1, value );
+				}
             }
         }
     }

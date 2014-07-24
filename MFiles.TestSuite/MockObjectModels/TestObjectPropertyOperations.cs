@@ -160,7 +160,39 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public ObjectVersionAndProperties SetProperties(ObjVer ObjVer, PropertyValues PropertyValues)
         {
-            throw new NotImplementedException();
+			// TODO: use arguments
+			// TODO: error checking
+			// TODO: use SetAllProperties?
+			foreach( PropertyValue propertyValue in PropertyValues )
+			{
+				if( vault.propertyDefs.SingleOrDefault( prop => prop.PropertyDef.ID == propertyValue.PropertyDef ) == null )
+					throw new Exception( string.Format( "Property does not exist. ({0})", propertyValue.PropertyDef ) );
+			}
+
+			List<ObjectVersionAndProperties> thisObj =
+				this.vault.ovaps.Where( obj => obj.ObjVer.ID == ObjVer.ID && obj.ObjVer.Type == ObjVer.Type ).ToList();
+			if( thisObj.Count == 0 )
+				throw new Exception( "Object not found" );
+			int maxVersion = thisObj.Max( obj => obj.ObjVer.Version );
+
+			TestObjectVersionAndProperties current =
+				( TestObjectVersionAndProperties )thisObj.Single( obj => obj.ObjVer.Version == maxVersion ).Clone();
+	        
+			foreach( PropertyValue propertyValue in PropertyValues )
+			{
+				int index = current.Properties.IndexOf( propertyValue.PropertyDef );
+				if(index == -1)
+				{
+					current.Properties.Add( -1, propertyValue );
+				}
+				else
+				{
+					current.Properties[ index ] = propertyValue;
+				}
+	        }
+	        current.ObjVer.Version += 1;
+			vault.ovaps.Add( current );
+			return current;
         }
 
         public ObjectVersionAndPropertiesOfMultipleObjects SetPropertiesOfMultipleObjects(SetPropertiesParamsOfMultipleObjects SetPropertiesParamsOfObjects)

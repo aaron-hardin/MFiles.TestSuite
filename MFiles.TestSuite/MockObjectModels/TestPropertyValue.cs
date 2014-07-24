@@ -11,12 +11,15 @@ namespace MFiles.TestSuite.MockObjectModels
     {
         public PropertyValue Clone()
         {
-            throw new NotImplementedException();
+			TestPropertyValue val = new TestPropertyValue();
+	        val.PropertyDef = PropertyDef;
+	        val.Value = Value.Clone();
+	        return val;
         }
 
         public string GetValueAsLocalizedText()
         {
-            throw new NotImplementedException();
+	        return Value.DisplayValue;
         }
 
         public string GetValueAsText(bool Localized, bool NULLAsEmptyString, bool EmptyLookupDisplayValuesAsHidden, bool LongDateFormat, bool NoSeconds, bool NumericValueAsKilobytes)

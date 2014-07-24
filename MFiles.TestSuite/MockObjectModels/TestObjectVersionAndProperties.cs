@@ -9,7 +9,7 @@ namespace MFiles.TestSuite.MockObjectModels
 {
     public class TestObjectVersionAndProperties : ObjectVersionAndProperties
     {
-        private PropertyValues properties;
+        private TestPropertyValues properties = new TestPropertyValues();
 
         public ObjectVersionAndProperties Clone()
         {
@@ -28,8 +28,18 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public PropertyValues Properties
         {
-            get { return this.properties.Clone(); }
-            set { this.properties = value; }
+            get { return this.properties; }
+	        set
+	        {
+				properties = new TestPropertyValues();
+		        foreach( PropertyValue propertyValue in value )
+		        {
+					TestPropertyValue pval = new TestPropertyValue();
+					pval.PropertyDef = propertyValue.PropertyDef;
+					pval.TypedValue = propertyValue.Value;
+			        this.properties.Add( -1, pval );
+		        }
+	        }
         }
 
         public Vault Vault { get; set; }
