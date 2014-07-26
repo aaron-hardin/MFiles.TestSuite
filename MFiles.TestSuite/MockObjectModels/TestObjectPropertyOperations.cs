@@ -29,13 +29,13 @@ namespace MFiles.TestSuite.MockObjectModels
         public PropertyValues GetProperties(ObjVer ObjVer, bool UpdateFromServer = false)
         {
             // TODO: handle args
-            List<ObjectVersionAndProperties> thisObj =
+            List<TestObjectVersionAndProperties> thisObj =
                 this.vault.ovaps.Where(ovap => ovap.ObjVer.ID == ObjVer.ID && ovap.ObjVer.Type == ObjVer.Type).ToList();
             if (thisObj.Count == 0)
                 return null;
             int lookupVersion = (ObjVer.Version == -1) ? thisObj.Max(obj => obj.ObjVer.Version) : ObjVer.Version;
 
-            return thisObj.Single(obj => obj.ObjVer.Version == lookupVersion).Properties;
+            return thisObj.Single(obj => obj.ObjVer.Version == lookupVersion).Properties.Clone();
         }
 
         public string GetPropertiesAsXML(ObjVer ObjVer, bool UpdateFromServer = false)
@@ -111,7 +111,7 @@ namespace MFiles.TestSuite.MockObjectModels
                     throw new Exception(string.Format("Property does not exist. ({0})", propertyValue.PropertyDef));
             }
 
-            List<ObjectVersionAndProperties> thisObj =
+			List<TestObjectVersionAndProperties> thisObj =
                 this.vault.ovaps.Where(obj => obj.ObjVer.ID == ObjVer.ID && obj.ObjVer.Type == ObjVer.Type).ToList();
             if(thisObj.Count == 0)
                 throw new Exception("Object not found");
@@ -123,7 +123,7 @@ namespace MFiles.TestSuite.MockObjectModels
                 (TestObjectVersionAndProperties) thisObj.Single(obj => obj.ObjVer.Version == maxVersion);//.Clone();
             
             //current.ObjVer.Version += 1;
-            current.Properties = PropertyValues;
+            current.Properties = PropertyValues.Clone();
           //  this.vault.ovaps.Add(current);
             return current;
         }
@@ -158,7 +158,7 @@ namespace MFiles.TestSuite.MockObjectModels
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties SetProperties(ObjVer ObjVer, PropertyValues PropertyValues)
+        public ObjectVersionAndProperties SetProperties(ObjVer objVer, PropertyValues PropertyValues)
         {
 			// TODO: use arguments
 			// TODO: error checking
@@ -169,29 +169,37 @@ namespace MFiles.TestSuite.MockObjectModels
 					throw new Exception( string.Format( "Property does not exist. ({0})", propertyValue.PropertyDef ) );
 			}
 
-			List<ObjectVersionAndProperties> thisObj =
-				this.vault.ovaps.Where( obj => obj.ObjVer.ID == ObjVer.ID && obj.ObjVer.Type == ObjVer.Type ).ToList();
+			List<TestObjectVersionAndProperties> thisObj =
+				this.vault.ovaps.Where( obj => obj.ObjVer.ID == objVer.ID && obj.ObjVer.Type == objVer.Type ).ToList();
 			if( thisObj.Count == 0 )
 				throw new Exception( "Object not found" );
 			int maxVersion = thisObj.Max( obj => obj.ObjVer.Version );
 
+			if(objVer.Version != -1 && objVer.Version != maxVersion)
+				throw new Exception("Invalid version.");
+
 			TestObjectVersionAndProperties current =
-				( TestObjectVersionAndProperties )thisObj.Single( obj => obj.ObjVer.Version == maxVersion ).Clone();
-	        
+				( TestObjectVersionAndProperties )thisObj.Single( obj => obj.ObjVer.Version == maxVersion );//.Clone();
+			if( !current.VersionData.ObjectCheckedOut )
+			{
+				current = ( TestObjectVersionAndProperties )current.Clone();
+				current.ObjVer.Version += 1;
+				vault.ovaps.Add( current );
+			}
+
 			foreach( PropertyValue propertyValue in PropertyValues )
 			{
-				int index = current.Properties.IndexOf( propertyValue.PropertyDef );
+				int index = current.properties.IndexOf( propertyValue.PropertyDef );
 				if(index == -1)
 				{
-					current.Properties.Add( -1, propertyValue );
+					current.properties.Add( -1, propertyValue );
 				}
 				else
 				{
-					current.Properties[ index ] = propertyValue;
+					current.properties[ index ] = propertyValue;
 				}
 	        }
-	        current.ObjVer.Version += 1;
-			vault.ovaps.Add( current );
+			
 			return current;
         }
 

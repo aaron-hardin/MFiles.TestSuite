@@ -9,7 +9,9 @@ namespace MFiles.TestSuite.MockObjectModels
 {
     public class TestObjectVersionAndProperties : ObjectVersionAndProperties
     {
-        private TestPropertyValues properties = new TestPropertyValues();
+        internal TestPropertyValues properties = new TestPropertyValues();
+
+	    internal TestObjectVersion versionData;
 
         public ObjectVersionAndProperties Clone()
         {
@@ -22,13 +24,26 @@ namespace MFiles.TestSuite.MockObjectModels
             return clone;
         }
 
+		public TestObjectVersionAndProperties CloneCheckedOut()
+		{
+			TestObjectVersionAndProperties clone = new TestObjectVersionAndProperties
+			{
+				Properties = this.Properties.Clone(),
+				Vault = this.Vault,
+				VersionData = this.versionData.Clone()
+			};
+			clone.versionData.checkedOut = true;
+
+			return clone;
+		}
+
         public ObjVer ObjVer {
 	        get { return VersionData.ObjVer; }
         }
 
         public PropertyValues Properties
         {
-            get { return this.properties; }
+            get { return this.properties.Clone(); }
 	        set
 	        {
 				properties = new TestPropertyValues();
@@ -44,6 +59,9 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public Vault Vault { get; set; }
 
-        public ObjectVersion VersionData { get; set; }
+        public ObjectVersion VersionData {
+	        get { return versionData; }
+	        set { versionData = new TestObjectVersion(value); }
+        }
     }
 }

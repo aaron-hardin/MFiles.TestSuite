@@ -13,7 +13,7 @@ namespace MFiles.TestSuite.MockObjectModels
     public class TestVault : Vault
     {
 		public IList<ObjID> checkedOut = new List<ObjID>(); 
-        public IList<ObjectVersionAndProperties> ovaps = new List<ObjectVersionAndProperties>(); 
+        public IList<TestObjectVersionAndProperties> ovaps = new List<TestObjectVersionAndProperties>(); 
         public IList<ValueListItem> valueListItems = new List<ValueListItem>(); 
         public IList<ObjTypeAdmin> objTypes = new List<ObjTypeAdmin>();
         public IList<PropertyDefAdmin> propertyDefs = new List<PropertyDefAdmin>();
@@ -126,7 +126,7 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public ObjectVersionAndProperties GetOvap(ObjVer objVer)
         {
-            List<ObjectVersionAndProperties> thisObj =
+            List<TestObjectVersionAndProperties> thisObj =
                 this.ovaps.Where(obj => obj.ObjVer.ID == objVer.ID && obj.ObjVer.Type == objVer.Type).ToList();
             if (thisObj.Count == 0)
                 return null;
@@ -138,7 +138,7 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public ObjectVersionAndProperties GetOvap(ObjID objId)
         {
-            List<ObjectVersionAndProperties> thisObj =
+            List<TestObjectVersionAndProperties> thisObj =
                 this.ovaps.Where(obj => obj.ObjVer.ID == objId.ID && obj.ObjVer.Type == objId.Type).ToList();
             if (thisObj.Count == 0)
                 return null;

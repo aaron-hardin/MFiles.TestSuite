@@ -41,7 +41,8 @@ namespace MFiles.TestSuite.MockObjectModels
         {
 			// TODO: implement
             //throw new NotImplementedException();
-			ObjectVersionAndProperties ovap = GetLatestObjectVersionAndProperties( ObjVer.ObjID, false );
+			TestObjectVersionAndProperties ovap = GetLatestTestObjectVersionAndProperties( ObjVer.ObjID, false );
+	        ovap.versionData.checkedOut = false;
 	        return ovap.VersionData;
         }
 
@@ -53,8 +54,8 @@ namespace MFiles.TestSuite.MockObjectModels
         public ObjectVersion CheckOut(ObjID ObjID)
         {
             // TODO: finish method
-	        ObjectVersionAndProperties ovap = GetLatestObjectVersionAndProperties( ObjID, false );
-	        ObjectVersionAndProperties newVersion = ovap.Clone();
+			TestObjectVersionAndProperties ovap = GetLatestTestObjectVersionAndProperties( ObjID, false );
+			TestObjectVersionAndProperties newVersion = ovap.CloneCheckedOut();
 	        newVersion.VersionData.ObjVer.Version++;
 	        vault.checkedOut.Add( newVersion.ObjVer.ObjID );
 			vault.ovaps.Add( newVersion );
@@ -81,7 +82,7 @@ namespace MFiles.TestSuite.MockObjectModels
         {
             // TODO: use parameter args
             int maxId = 0;
-            List<ObjectVersionAndProperties> objThisType = this.vault.ovaps.Where(obj => obj.ObjVer.Type == ObjectType).ToList();
+            List<TestObjectVersionAndProperties> objThisType = this.vault.ovaps.Where(obj => obj.ObjVer.Type == ObjectType).ToList();
             if (objThisType.Count > 0)
                 maxId = objThisType.Max(obj => obj.ObjVer.ID);
             TestObjectVersion objectVersion = new TestObjectVersion
@@ -154,7 +155,7 @@ namespace MFiles.TestSuite.MockObjectModels
         public ObjVer GetLatestObjVer(ObjID ObjID, bool AllowCheckedOut, bool UpdateFromServer = false)
         {
             // TODO: handle AllowCheckedOut and UpdateFromServer
-            List<ObjectVersionAndProperties> thisObj =
+            List<TestObjectVersionAndProperties> thisObj =
                 this.vault.ovaps.Where(obj => obj.ObjVer.ID == ObjID.ID && obj.ObjVer.Type == ObjID.Type).ToList();
             if (thisObj.Count == 0)
                 return null;
@@ -171,13 +172,24 @@ namespace MFiles.TestSuite.MockObjectModels
         public ObjectVersionAndProperties GetLatestObjectVersionAndProperties(ObjID ObjID, bool AllowCheckedOut, bool UpdateFromServer = false)
         {
             // TODO: use arguments
-            List<ObjectVersionAndProperties> thisObj = this.vault.ovaps.Where(obj => obj.ObjVer.ID == ObjID.ID && obj.ObjVer.Type == ObjID.Type).ToList();
+            List<TestObjectVersionAndProperties> thisObj = this.vault.ovaps.Where(obj => obj.ObjVer.ID == ObjID.ID && obj.ObjVer.Type == ObjID.Type).ToList();
             if (thisObj.Count == 0)
                 return null;
             int maxObj = thisObj.Max(obj => obj.ObjVer.Version);
             ObjectVersionAndProperties ovap = thisObj.Single(obj => obj.ObjVer.Version == maxObj);
             return ovap;
         }
+
+		public TestObjectVersionAndProperties GetLatestTestObjectVersionAndProperties( ObjID ObjID, bool AllowCheckedOut, bool UpdateFromServer = false )
+		{
+			// TODO: use arguments
+			List<TestObjectVersionAndProperties> thisObj = this.vault.ovaps.Where( obj => obj.ObjVer.ID == ObjID.ID && obj.ObjVer.Type == ObjID.Type ).ToList();
+			if( thisObj.Count == 0 )
+				return null;
+			int maxObj = thisObj.Max( obj => obj.ObjVer.Version );
+			TestObjectVersionAndProperties ovap = thisObj.Single( obj => obj.ObjVer.Version == maxObj );
+			return ovap;
+		}
 
         public string GetMFilesURLForObject(ObjID ObjID, int TargetVersion, bool SpecificVersion, MFilesURLType URLType = MFilesURLType.MFilesURLTypeShow)
         {
@@ -207,7 +219,7 @@ namespace MFiles.TestSuite.MockObjectModels
         public ObjectVersion GetObjectInfo(ObjVer ObjVer, bool LatestVersion, bool UpdateFromServer = false)
         {
             // TODO: use LatestVersion and UpdateFromServer
-            List<ObjectVersionAndProperties> thisObj =
+			List<TestObjectVersionAndProperties> thisObj =
                 this.vault.ovaps.Where(obj => obj.ObjVer.ID == ObjVer.ID && obj.ObjVer.Type == ObjVer.Type).ToList();
             if (thisObj.Count == 0)
                 return null;

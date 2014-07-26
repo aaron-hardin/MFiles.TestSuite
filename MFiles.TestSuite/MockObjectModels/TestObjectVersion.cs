@@ -5,11 +5,18 @@ namespace MFiles.TestSuite.MockObjectModels
 {
     public class TestObjectVersion : ObjectVersion
     {
-	    private readonly bool checkedOut;
+	    public bool checkedOut;
 
 		internal TestObjectVersion(bool checkedOut)
 		{
 			this.checkedOut = checkedOut;
+		}
+
+		public TestObjectVersion(ObjectVersion objectVersion)
+		{
+			this.checkedOut = objectVersion.ObjectCheckedOut;
+			this.Title = objectVersion.Title;
+			this.ObjVer = objectVersion.ObjVer;
 		}
 
 		public TestObjectVersion()
