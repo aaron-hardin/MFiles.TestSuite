@@ -280,6 +280,8 @@ namespace MFiles.TestSuite.MockObjectModels
                         {
                             // TODO: find out what causes the following line to be necessary
                             value.ObjectType = pdef.ValueList;
+							if(value.Deleted)
+								continue;
                             if (relationships.SingleOrDefault(obj => obj.ObjVer.ID == value.Item && obj.ObjVer.Type == value.ObjectType) == null)
                             {
                                 relationships.Add(value.GetAsObjectVersion(this.vault, true));
@@ -306,6 +308,8 @@ namespace MFiles.TestSuite.MockObjectModels
                 {
                     if(this.vault.ObjectOperations.GetLatestObjVer(ovap.ObjVer.ObjID, true, true).Version != ovap.ObjVer.Version)
                         continue; // Only do latest version
+					if(ovap.VersionData.Deleted)
+						continue;
                     foreach (PropertyDef propertyDef in propertiesThatReferenceThisObjType)
                     {
                         if (ovap.Properties.IndexOf(propertyDef.ID) == -1)
@@ -388,7 +392,9 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public ObjectVersion RemoveObject(ObjID ObjID)
         {
-            throw new NotImplementedException();
+	        TestObjectVersionAndProperties ovap = GetLatestTestObjectVersionAndProperties( ObjID, false, false );
+	        ovap.versionData.deleted = true;
+	        return ovap.VersionData;
         }
 
         public ObjectVersions ResolveConflict(ObjID ParticipantObjID, bool KeepThis)

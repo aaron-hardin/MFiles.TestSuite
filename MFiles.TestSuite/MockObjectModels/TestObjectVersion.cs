@@ -5,7 +5,8 @@ namespace MFiles.TestSuite.MockObjectModels
 {
     public class TestObjectVersion : ObjectVersion
     {
-	    public bool checkedOut;
+	    internal bool checkedOut;
+	    internal bool deleted;
 
 		internal TestObjectVersion(bool checkedOut)
 		{
@@ -70,7 +71,7 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public bool Deleted
         {
-            get { throw new NotImplementedException(); }
+            get { return deleted; }
         }
 
         public string DisplayID
