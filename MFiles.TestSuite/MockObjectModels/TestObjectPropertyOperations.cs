@@ -1,99 +1,97 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using MFilesAPI;
 
 namespace MFiles.TestSuite.MockObjectModels
 {
     public class TestObjectPropertyOperations : VaultObjectPropertyOperations
     {
-        private TestVault vault;
+        private readonly TestVault vault;
 
         public TestObjectPropertyOperations(TestVault vault)
         {
             this.vault = vault;
         }
 
-        public AccessControlList GenerateAutomaticPermissionsFromPropertyValues(PropertyValues PropertyValues)
+        public AccessControlList GenerateAutomaticPermissionsFromPropertyValues(PropertyValues propertyValues)
         {
             throw new NotImplementedException();
         }
 
-        public WorkflowAssignment GetAssignment_DEPRECATED(ObjVer ObjVer, bool UpdateFromServer = false)
+        public WorkflowAssignment GetAssignment_DEPRECATED(ObjVer objVer, bool updateFromServer = false)
         {
             throw new NotImplementedException();
         }
 
-        public PropertyValues GetProperties(ObjVer ObjVer, bool UpdateFromServer = false)
+        public PropertyValues GetProperties(ObjVer objVer, bool updateFromServer = false)
         {
             // TODO: handle args
             List<TestObjectVersionAndProperties> thisObj =
-                this.vault.ovaps.Where(ovap => ovap.ObjVer.ID == ObjVer.ID && ovap.ObjVer.Type == ObjVer.Type).ToList();
+                vault.ovaps.Where(ovap => ovap.ObjVer.ID == objVer.ID && ovap.ObjVer.Type == objVer.Type).ToList();
             if (thisObj.Count == 0)
                 return null;
-            int lookupVersion = (ObjVer.Version == -1) ? thisObj.Max(obj => obj.ObjVer.Version) : ObjVer.Version;
+            int lookupVersion = (objVer.Version == -1) ? thisObj.Max(obj => obj.ObjVer.Version) : objVer.Version;
 
             return thisObj.Single(obj => obj.ObjVer.Version == lookupVersion).Properties.Clone();
         }
 
-        public string GetPropertiesAsXML(ObjVer ObjVer, bool UpdateFromServer = false)
+        public string GetPropertiesAsXML(ObjVer objVer, bool updateFromServer = false)
         {
             throw new NotImplementedException();
         }
 
-        public PropertyValuesForDisplay GetPropertiesForDisplay(ObjVer ObjVer, bool UpdateFromServer = false)
+        public PropertyValuesForDisplay GetPropertiesForDisplay(ObjVer objVer, bool updateFromServer = false)
         {
             throw new NotImplementedException();
         }
 
-        public NamedValues GetPropertiesForMetadataSync(ObjVer ObjVer, MFMetadataSyncFormat Format)
+        public NamedValues GetPropertiesForMetadataSync(ObjVer objVer, MFMetadataSyncFormat format)
         {
             throw new NotImplementedException();
         }
 
-        public PropertyValuesOfMultipleObjects GetPropertiesOfMultipleObjects(ObjVers ObjectVersions)
+        public PropertyValuesOfMultipleObjects GetPropertiesOfMultipleObjects(ObjVers objectVersions)
         {
             throw new NotImplementedException();
         }
 
-        public PropertyValuesWithIconClues GetPropertiesWithIconClues(ObjVer ObjVer, bool UpdateFromServer = false)
+        public PropertyValuesWithIconClues GetPropertiesWithIconClues(ObjVer objVer, bool updateFromServer = false)
         {
             throw new NotImplementedException();
         }
 
-        public PropertyValuesWithIconCluesOfMultipleObjects GetPropertiesWithIconCluesOfMultipleObjects(ObjVers ObjectVersions)
+        public PropertyValuesWithIconCluesOfMultipleObjects GetPropertiesWithIconCluesOfMultipleObjects(ObjVers objectVersions)
         {
             throw new NotImplementedException();
         }
 
-        public PropertyValue GetProperty(ObjVer ObjVer, int Property)
+        public PropertyValue GetProperty(ObjVer objVer, int property)
         {
             throw new NotImplementedException();
         }
 
-        public VersionComment GetVersionComment(ObjVer ObjVer)
+        public VersionComment GetVersionComment(ObjVer objVer)
         {
             throw new NotImplementedException();
         }
 
-        public VersionComments GetVersionCommentHistory(ObjVer ObjVer)
+        public VersionComments GetVersionCommentHistory(ObjVer objVer)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionWorkflowState GetWorkflowState(ObjVer ObjVer, bool UpdateFromServer = false)
+        public ObjectVersionWorkflowState GetWorkflowState(ObjVer objVer, bool updateFromServer = false)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties MarkAssignmentComplete(ObjVer ObjVer)
+        public ObjectVersionAndProperties MarkAssignmentComplete(ObjVer objVer)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties RemoveProperty(ObjVer ObjVer, int Property)
+        public ObjectVersionAndProperties RemoveProperty(ObjVer objVer, int property)
         {
             throw new NotImplementedException();
         }
@@ -132,49 +130,49 @@ namespace MFiles.TestSuite.MockObjectModels
             return current;
         }
 
-        public ObjectVersionAndProperties SetAllPropertiesWithPermissions(ObjVer objVer, bool allowModifyingCheckedInObject, PropertyValues propertyValues, MFACLEnforcingMode ACLEnforcingMode = MFACLEnforcingMode.MFACLEnforcingModeAutomatic, AccessControlList ACLProvided = null)
+        public ObjectVersionAndProperties SetAllPropertiesWithPermissions(ObjVer objVer, bool allowModifyingCheckedInObject, PropertyValues propertyValues, MFACLEnforcingMode aclEnforcingMode = MFACLEnforcingMode.MFACLEnforcingModeAutomatic, AccessControlList aclProvided = null)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties SetAllPropertiesWithPermissionsEx(ObjVer objVer, bool allowModifyingCheckedInObject, PropertyValues propertyValues, MFACLEnforcingMode ACLEnforcingMode, AccessControlList ACLProvided, [System.Runtime.InteropServices.OptionalAttribute][System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.IDispatch)][System.Runtime.CompilerServices.IDispatchConstantAttribute]object ElectronicSignature)
+		//public ObjectVersionAndProperties SetAllPropertiesWithPermissionsEx(ObjVer objVer, bool allowModifyingCheckedInObject, PropertyValues propertyValues, MFACLEnforcingMode aclEnforcingMode, AccessControlList aclProvided, [System.Runtime.InteropServices.OptionalAttribute][System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.IDispatch)][System.Runtime.CompilerServices.IDispatchConstantAttribute]object electronicSignature )
+		//{
+		//	throw new NotImplementedException();
+		//}
+
+        public ObjectVersionAndProperties SetAllPropertiesWithPermissionsEx(ObjVer objVer, bool allowModifyingCheckedInObject, PropertyValues propertyValues, MFACLEnforcingMode aclEnforcingMode = MFACLEnforcingMode.MFACLEnforcingModeAutomatic, AccessControlList aclProvided = null, object electronicSignature = null)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties SetAllPropertiesWithPermissionsEx(ObjVer objVer, bool allowModifyingCheckedInObject, PropertyValues propertyValues, MFACLEnforcingMode ACLEnforcingMode = MFACLEnforcingMode.MFACLEnforcingModeAutomatic, AccessControlList ACLProvided = null)
+        public ObjectVersionAndProperties SetAssignment_DEPRECATED(ObjVer objVer, WorkflowAssignment assignment)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties SetAssignment_DEPRECATED(ObjVer ObjVer, WorkflowAssignment Assignment)
+        public ObjectVersionAndProperties SetCreationInfoAdmin(ObjVer objVer, bool updateCreatedBy, TypedValue createdBy, bool updateCreated, TypedValue createdUtc)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties SetCreationInfoAdmin(ObjVer ObjVer, bool UpdateCreatedBy, TypedValue CreatedBy, bool UpdateCreated, TypedValue CreatedUtc)
+        public ObjectVersionAndProperties SetLastModificationInfoAdmin(ObjVer objVer, bool updateLastModifiedBy, TypedValue lastModifiedBy, bool updateLastModified, TypedValue lastModifiedUtc)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties SetLastModificationInfoAdmin(ObjVer ObjVer, bool UpdateLastModifiedBy, TypedValue LastModifiedBy, bool UpdateLastModified, TypedValue LastModifiedUtc)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ObjectVersionAndProperties SetProperties(ObjVer objVer, PropertyValues PropertyValues)
+        public ObjectVersionAndProperties SetProperties(ObjVer objVer, PropertyValues propertyValues)
         {
 			// TODO: use arguments
 			// TODO: error checking
 			// TODO: use SetAllProperties?
-			foreach( PropertyValue propertyValue in PropertyValues )
+			foreach( PropertyValue propertyValue in propertyValues )
 			{
 				if( vault.propertyDefs.SingleOrDefault( prop => prop.PropertyDef.ID == propertyValue.PropertyDef ) == null )
 					throw new Exception( string.Format( "Property does not exist. ({0})", propertyValue.PropertyDef ) );
 			}
 
 			List<TestObjectVersionAndProperties> thisObj =
-				this.vault.ovaps.Where( obj => obj.ObjVer.ID == objVer.ID && obj.ObjVer.Type == objVer.Type ).ToList();
+				vault.ovaps.Where( obj => obj.ObjVer.ID == objVer.ID && obj.ObjVer.Type == objVer.Type ).ToList();
 			if( thisObj.Count == 0 )
 				throw new Exception( "Object not found" );
 			int maxVersion = thisObj.Max( obj => obj.ObjVer.Version );
@@ -182,8 +180,7 @@ namespace MFiles.TestSuite.MockObjectModels
 			if(objVer.Version != -1 && objVer.Version != maxVersion)
 				throw new Exception("Invalid version.");
 
-			TestObjectVersionAndProperties current =
-				( TestObjectVersionAndProperties )thisObj.Single( obj => obj.ObjVer.Version == maxVersion );//.Clone();
+			TestObjectVersionAndProperties current = thisObj.Single( obj => obj.ObjVer.Version == maxVersion );
 			if( !current.VersionData.ObjectCheckedOut )
 			{
 				current = ( TestObjectVersionAndProperties )current.Clone();
@@ -191,7 +188,7 @@ namespace MFiles.TestSuite.MockObjectModels
 				vault.ovaps.Add( current );
 			}
 
-			foreach( PropertyValue propertyValue in PropertyValues )
+			foreach( PropertyValue propertyValue in propertyValues )
 			{
 				int index = current.properties.IndexOf( propertyValue.PropertyDef );
 				if(index == -1)
@@ -207,42 +204,42 @@ namespace MFiles.TestSuite.MockObjectModels
 			return current;
         }
 
-        public ObjectVersionAndPropertiesOfMultipleObjects SetPropertiesOfMultipleObjects(SetPropertiesParamsOfMultipleObjects SetPropertiesParamsOfObjects)
+        public ObjectVersionAndPropertiesOfMultipleObjects SetPropertiesOfMultipleObjects(SetPropertiesParamsOfMultipleObjects setPropertiesParamsOfObjects)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties SetPropertiesWithPermissions(ObjVer ObjVer, PropertyValues PropertyValues, MFACLEnforcingMode ACLEnforcingMode = MFACLEnforcingMode.MFACLEnforcingModeAutomatic, AccessControlList ACLProvided = null)
+        public ObjectVersionAndProperties SetPropertiesWithPermissions(ObjVer objVer, PropertyValues propertyValues, MFACLEnforcingMode aclEnforcingMode = MFACLEnforcingMode.MFACLEnforcingModeAutomatic, AccessControlList aclProvided = null)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties SetPropertiesWithPermissionsEx(ObjVer ObjVer, PropertyValues PropertyValues, MFACLEnforcingMode ACLEnforcingMode, AccessControlList ACLProvided, [System.Runtime.InteropServices.OptionalAttribute][System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.IDispatch)][System.Runtime.CompilerServices.IDispatchConstantAttribute]object ElectronicSignature)
+		//public ObjectVersionAndProperties SetPropertiesWithPermissionsEx(ObjVer objVer, PropertyValues propertyValues, MFACLEnforcingMode aclEnforcingMode, AccessControlList aclProvided, [System.Runtime.InteropServices.OptionalAttribute][System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.IDispatch)][System.Runtime.CompilerServices.IDispatchConstantAttribute]object electronicSignature)
+		//{
+		//	throw new NotImplementedException();
+		//}
+
+		public ObjectVersionAndProperties SetPropertiesWithPermissionsEx( ObjVer objVer, PropertyValues propertyValues, MFACLEnforcingMode aclEnforcingMode = MFACLEnforcingMode.MFACLEnforcingModeAutomatic, AccessControlList aclProvided = null, object electronicSignature = null )
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties SetPropertiesWithPermissionsEx(ObjVer ObjVer, PropertyValues PropertyValues, MFACLEnforcingMode ACLEnforcingMode = MFACLEnforcingMode.MFACLEnforcingModeAutomatic, AccessControlList ACLProvided = null)
+        public ObjectVersionAndProperties SetProperty(ObjVer objVer, PropertyValue propertyValue)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties SetProperty(ObjVer ObjVer, PropertyValue PropertyValue)
+        public ObjectVersionAndProperties SetVersionComment(ObjVer objVer, PropertyValue versionComment)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties SetVersionComment(ObjVer ObjVer, PropertyValue VersionComment)
+        public ObjectVersionAndProperties SetWorkflowState(ObjVer objVer, ObjectVersionWorkflowState workflowState)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties SetWorkflowState(ObjVer ObjVer, ObjectVersionWorkflowState WorkflowState)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ObjectVersionAndProperties SetWorkflowStateEx(ObjVer ObjVer, ObjectVersionWorkflowState WorkflowState, [System.Runtime.InteropServices.OptionalAttribute][System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.IDispatch)][System.Runtime.CompilerServices.IDispatchConstantAttribute]object ElectronicSignature)
+        public ObjectVersionAndProperties SetWorkflowStateEx(ObjVer objVer, ObjectVersionWorkflowState workflowState, [System.Runtime.InteropServices.OptionalAttribute][System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.IDispatch)][System.Runtime.CompilerServices.IDispatchConstantAttribute]object electronicSignature)
         {
             throw new NotImplementedException();
         }
