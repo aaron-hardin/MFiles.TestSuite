@@ -7,6 +7,7 @@
     <authors>Aaron Hardin</authors>
     <owners>Aaron Hardin</owners>
     <projectUrl>https://github.com/aaron-hardin/MFiles.TestSuite/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/aaron-hardin/MFiles.TestSuite/master/vault.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Package for mock objects to test M-Files applications.</description>
     <releaseNotes></releaseNotes>
