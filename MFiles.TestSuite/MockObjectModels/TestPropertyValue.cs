@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using MFilesAPI;
 
 namespace MFiles.TestSuite.MockObjectModels
 {
     public class TestPropertyValue : PropertyValue
     {
+		public TestPropertyValue()
+		{
+			TypedValue = new TestTypedValue();
+		}
+
         public PropertyValue Clone()
         {
-			TestPropertyValue val = new TestPropertyValue();
-	        val.PropertyDef = PropertyDef;
-	        val.Value = Value.Clone();
+			TestPropertyValue val = new TestPropertyValue { PropertyDef = PropertyDef, Value = Value.Clone() };
 	        return val;
         }
 
@@ -22,7 +21,7 @@ namespace MFiles.TestSuite.MockObjectModels
 	        return Value.DisplayValue;
         }
 
-        public string GetValueAsText(bool Localized, bool NULLAsEmptyString, bool EmptyLookupDisplayValuesAsHidden, bool LongDateFormat, bool NoSeconds, bool NumericValueAsKilobytes)
+        public string GetValueAsText(bool localized, bool nullAsEmptyString, bool emptyLookupDisplayValuesAsHidden, bool longDateFormat, bool noSeconds, bool numericValueAsKilobytes)
         {
             throw new NotImplementedException();
         }
@@ -36,8 +35,8 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public TypedValue TypedValue
         {
-            get { return this.Value; }
-            set { this.Value = value; }
+            get { return Value; }
+            set { Value = value; }
         }
 
         public TypedValue Value { get; set; }
