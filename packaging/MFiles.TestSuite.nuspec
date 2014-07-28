@@ -20,5 +20,8 @@
 	<file src="..\MFiles.TestSuite\bin\Release\MFiles.TestSuite.dll" target="lib\net45"/>
 	<file src="..\redist\Newtonsoft.Json.dll" target="lib\net45"/>
 	<file src="..\redist\nunit.framework.dll" target="lib\net45"/>
+	<file src="..\MFiles.TestSuite\bin\Release\MFiles.TestSuite.dll" target="lib\net40"/>
+	<file src="..\redist\Newtonsoft.Json.dll" target="lib\net40"/>
+	<file src="..\redist\nunit.framework.dll" target="lib\net40"/>
   </files>
 </package>
