@@ -98,47 +98,51 @@ namespace MFiles.TestSuite.MockObjectModels
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties SetAllProperties(
-            ObjVer ObjVer,
-            bool AllowModifyingCheckedInObject,
-            PropertyValues PropertyValues)
+        public ObjectVersionAndProperties SetAllProperties(ObjVer objVer, bool allowModifyingCheckedInObject, PropertyValues propertyValues)
         {
-            // TODO: use arguments
             // TODO: error checking
-            foreach (PropertyValue propertyValue in PropertyValues)
+            foreach (PropertyValue propertyValue in propertyValues)
             {
                 if(vault.propertyDefs.SingleOrDefault(prop => prop.PropertyDef.ID == propertyValue.PropertyDef) == null)
                     throw new Exception(string.Format("Property does not exist. ({0})", propertyValue.PropertyDef));
             }
 
 			List<TestObjectVersionAndProperties> thisObj =
-                this.vault.ovaps.Where(obj => obj.ObjVer.ID == ObjVer.ID && obj.ObjVer.Type == ObjVer.Type).ToList();
+                vault.ovaps.Where(obj => obj.ObjVer.ID == objVer.ID && obj.ObjVer.Type == objVer.Type).ToList();
             if(thisObj.Count == 0)
                 throw new Exception("Object not found");
             int maxVersion = thisObj.Max(obj => obj.ObjVer.Version);
             
-            if(ObjVer.Version != -1 && ObjVer.Version != maxVersion)
+            if(objVer.Version != -1 && objVer.Version != maxVersion)
                 throw new Exception("Invalid version");
-            TestObjectVersionAndProperties current =
-                (TestObjectVersionAndProperties) thisObj.Single(obj => obj.ObjVer.Version == maxVersion);//.Clone();
-            
-            //current.ObjVer.Version += 1;
-            current.Properties = PropertyValues.Clone();
-          //  this.vault.ovaps.Add(current);
+            TestObjectVersionAndProperties current = thisObj.Single(obj => obj.ObjVer.Version == maxVersion);
+
+			if( !current.VersionData.ObjectCheckedOut )
+			{
+				if(!allowModifyingCheckedInObject)
+				{
+					throw new Exception("Modifying Checked In Object not allowed.");
+				}
+				current = ( TestObjectVersionAndProperties )current.Clone();
+				current.ObjVer.Version += 1;
+				vault.ovaps.Add( current );
+			}
+            current.Properties = propertyValues.Clone();
+
             return current;
         }
 
-        public ObjectVersionAndProperties SetAllPropertiesWithPermissions(ObjVer ObjVer, bool AllowModifyingCheckedInObject, PropertyValues PropertyValues, MFACLEnforcingMode ACLEnforcingMode = MFACLEnforcingMode.MFACLEnforcingModeAutomatic, AccessControlList ACLProvided = null)
+        public ObjectVersionAndProperties SetAllPropertiesWithPermissions(ObjVer objVer, bool allowModifyingCheckedInObject, PropertyValues propertyValues, MFACLEnforcingMode ACLEnforcingMode = MFACLEnforcingMode.MFACLEnforcingModeAutomatic, AccessControlList ACLProvided = null)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties SetAllPropertiesWithPermissionsEx(ObjVer ObjVer, bool AllowModifyingCheckedInObject, PropertyValues PropertyValues, MFACLEnforcingMode ACLEnforcingMode, AccessControlList ACLProvided, [System.Runtime.InteropServices.OptionalAttribute][System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.IDispatch)][System.Runtime.CompilerServices.IDispatchConstantAttribute]object ElectronicSignature)
+        public ObjectVersionAndProperties SetAllPropertiesWithPermissionsEx(ObjVer objVer, bool allowModifyingCheckedInObject, PropertyValues propertyValues, MFACLEnforcingMode ACLEnforcingMode, AccessControlList ACLProvided, [System.Runtime.InteropServices.OptionalAttribute][System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.IDispatch)][System.Runtime.CompilerServices.IDispatchConstantAttribute]object ElectronicSignature)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties SetAllPropertiesWithPermissionsEx(ObjVer ObjVer, bool AllowModifyingCheckedInObject, PropertyValues PropertyValues, MFACLEnforcingMode ACLEnforcingMode = MFACLEnforcingMode.MFACLEnforcingModeAutomatic, AccessControlList ACLProvided = null)
+        public ObjectVersionAndProperties SetAllPropertiesWithPermissionsEx(ObjVer objVer, bool allowModifyingCheckedInObject, PropertyValues propertyValues, MFACLEnforcingMode ACLEnforcingMode = MFACLEnforcingMode.MFACLEnforcingModeAutomatic, AccessControlList ACLProvided = null)
         {
             throw new NotImplementedException();
         }
