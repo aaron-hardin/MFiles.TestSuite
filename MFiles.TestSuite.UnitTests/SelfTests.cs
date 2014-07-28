@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MFilesAPI;
+﻿using MFilesAPI;
 using NUnit.Framework;
 
-namespace MFiles.TestSuite
+namespace MFiles.TestSuite.UnitTests
 {
     [TestFixture]
+	[Category( TestCategories.UNIT )]
     public class SelfTests
     {
         [Test]
@@ -20,5 +17,11 @@ namespace MFiles.TestSuite
 
             StructureGenerator.VaultToJsonFile(vault, "VaultStructure.json");
         }
+
+	    [Test]
+	    public void TestFail()
+	    {
+		    Assert.Fail("Testing build process.");
+	    }
     }
 }

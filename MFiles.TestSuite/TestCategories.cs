@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace MFiles.TestSuite
+﻿namespace MFiles.TestSuite
 {
     /// <summary>
     /// Constant strings used for test categories, this is to avoid miss-spelling
