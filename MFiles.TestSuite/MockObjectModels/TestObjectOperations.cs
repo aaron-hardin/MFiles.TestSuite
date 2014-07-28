@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using MFilesAPI;
 using VaultMockObjects.VaultExtensions;
 
@@ -10,51 +8,51 @@ namespace MFiles.TestSuite.MockObjectModels
 {
     public class TestObjectOperations : VaultObjectOperations
     {
-        private TestVault vault;
+        private readonly TestVault vault;
 
         public TestObjectOperations(TestVault vault)
         {
             this.vault = vault;
         }
 
-        public ObjectVersionAndProperties AddFavorite(ObjID ObjID)
+        public ObjectVersionAndProperties AddFavorite(ObjID objID)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndPropertiesOfMultipleObjects AddFavorites(ObjIDs ObjIDs)
+        public ObjectVersionAndPropertiesOfMultipleObjects AddFavorites(ObjIDs objIDs)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersion ChangePermissionsToACL(ObjVer ObjVer, AccessControlList AccessControlList, bool ChangeAllVersions)
+        public ObjectVersion ChangePermissionsToACL(ObjVer objVer, AccessControlList accessControlList, bool changeAllVersions)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersion ChangePermissionsToNamedACL(ObjVer ObjVer, int NamedACL, bool ChangeAllVersions)
+        public ObjectVersion ChangePermissionsToNamedACL(ObjVer objVer, int namedAcl, bool changeAllVersions)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersion CheckIn(ObjVer ObjVer)
+        public ObjectVersion CheckIn(ObjVer objVer)
         {
 			// TODO: implement
             //throw new NotImplementedException();
-			TestObjectVersionAndProperties ovap = GetLatestTestObjectVersionAndProperties( ObjVer.ObjID, false );
+			TestObjectVersionAndProperties ovap = GetLatestTestObjectVersionAndProperties( objVer.ObjID, false );
 	        ovap.versionData.checkedOut = false;
 	        return ovap.VersionData;
         }
 
-        public ObjectVersions CheckInMultipleObjects(ObjVers ObjVers)
+        public ObjectVersions CheckInMultipleObjects(ObjVers objVers)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersion CheckOut(ObjID ObjID)
+        public ObjectVersion CheckOut(ObjID objID)
         {
             // TODO: finish method
-			TestObjectVersionAndProperties ovap = GetLatestTestObjectVersionAndProperties( ObjID, false );
+			TestObjectVersionAndProperties ovap = GetLatestTestObjectVersionAndProperties( objID, false );
 			TestObjectVersionAndProperties newVersion = ovap.CloneCheckedOut();
 	        newVersion.VersionData.ObjVer.Version++;
 	        vault.checkedOut.Add( newVersion.ObjVer.ObjID );
@@ -62,101 +60,118 @@ namespace MFiles.TestSuite.MockObjectModels
 	        return newVersion.VersionData;
         }
 
-        public ObjectVersions CheckOutMultipleObjects(ObjIDs ObjIDs)
+        public ObjectVersions CheckOutMultipleObjects(ObjIDs objIDs)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties CreateNewAssignment(string AssignmentName, string AssignmentDescription, TypedValue AssignedToUser, TypedValue Deadline = null, AccessControlList AccessControlList = null)
+        public ObjectVersionAndProperties CreateNewAssignment(string assignmentName, string assignmentDescription, TypedValue assignedToUser, TypedValue deadline = null, AccessControlList accessControlList = null)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties CreateNewEmptySingleFileDocument(PropertyValues PropertyValues, string Title, string Extension, AccessControlList AccessControlList = null)
+        public ObjectVersionAndProperties CreateNewEmptySingleFileDocument(PropertyValues propertyValues, string title, string extension, AccessControlList accessControlList = null)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties CreateNewObject(int ObjectType, PropertyValues PropertyValues, 
-            SourceObjectFiles SourceObjectFiles = null, AccessControlList AccessControlList = null)
+        public ObjectVersionAndProperties CreateNewObject(int objectType, PropertyValues propertyValues, 
+            SourceObjectFiles sourceObjectFiles = null, AccessControlList accessControlList = null)
         {
             // TODO: use parameter args
-            int maxId = 0;
-            List<TestObjectVersionAndProperties> objThisType = this.vault.ovaps.Where(obj => obj.ObjVer.Type == ObjectType).ToList();
-            if (objThisType.Count > 0)
-                maxId = objThisType.Max(obj => obj.ObjVer.ID);
-            TestObjectVersion objectVersion = new TestObjectVersion
-            {
-	            ObjVer = new ObjVer { Type = ObjectType, ID = maxId + 1, Version = 1 },
-	            Class = PropertyValues.SearchForProperty( 100 ).Value.GetLookupID()
-            };
-	        TestObjectVersionAndProperties ovap = new TestObjectVersionAndProperties
-            {
-                Properties = PropertyValues,
-                Vault = this.vault,
-                VersionData = objectVersion
-            };
-            this.vault.ovaps.Add(ovap);
+	        TestObjectVersionAndProperties ovap = CreateNewTestObject( objectType, propertyValues );
             return ovap;
         }
 
-        public ObjectVersionAndProperties CreateNewObjectEx(int ObjectType, PropertyValues Properties, SourceObjectFiles SourceFiles, 
-            bool SFD, bool CheckIn, AccessControlList AccessControlList = null)
-        {
+		private TestObjectVersionAndProperties CreateNewTestObject(int objectType, PropertyValues propertyValues)
+		{
+			int maxId = 0;
+			List<TestObjectVersionAndProperties> objThisType = vault.ovaps.Where( obj => obj.ObjVer.Type == objectType ).ToList();
+			if( objThisType.Count > 0 )
+				maxId = objThisType.Max( obj => obj.ObjVer.ID );
+			TestObjectVersion objectVersion = new TestObjectVersion
+			{
+				ObjVer = new ObjVer { Type = objectType, ID = maxId + 1, Version = 1 },
+				Class = propertyValues.SearchForProperty( 100 ).Value.GetLookupID()
+			};
+			TestObjectVersionAndProperties ovap = new TestObjectVersionAndProperties
+			{
+				Properties = propertyValues,
+				Vault = vault,
+				VersionData = objectVersion
+			};
+			vault.ovaps.Add( ovap );
+			return ovap;
+		}
 
-            throw new NotImplementedException();
+        public ObjectVersionAndProperties CreateNewObjectEx(int objectType, PropertyValues properties, SourceObjectFiles sourceFiles, 
+            bool sfd, bool checkIn, AccessControlList accessControlList = null)
+        {
+			// TODO: use parameter args
+			TestPropertyValue pv = new TestPropertyValue
+			{
+				PropertyDef = ( int ) MFBuiltInPropertyDef.MFBuiltInPropertyDefSingleFileObject
+			};
+	        pv.TypedValue.SetValue( MFDataType.MFDatatypeBoolean, sfd );
+			properties.Add( -1, pv );
+			TestObjectVersionAndProperties ovap = CreateNewTestObject( objectType, properties );
+			if(!checkIn)
+			{
+				ovap.versionData.checkedOut = true;
+			}
+	        return ovap;
         }
 
-        public int CreateNewObjectExQuick(int ObjectType, PropertyValues Properties, SourceObjectFiles SourceFiles, bool SFD, bool CheckIn, AccessControlList AccessControlList = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ObjectVersionAndProperties CreateNewSFDObject(int ObjectType, PropertyValues Properties, SourceObjectFile SourceFile, bool CheckIn, AccessControlList AccessControlList = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int CreateNewSFDObjectQuick(int ObjectType, PropertyValues Properties, SourceObjectFile SourceFile, bool CheckIn, AccessControlList AccessControlList = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DelayedCheckIn(ObjVer ObjVer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DestroyObject(ObjID ObjID, bool DestroyAllVersions, int ObjectVersion)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DestroyObjects(ObjIDs ObjIDs)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ObjectVersion ForceUndoCheckout(ObjVer ObjVer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ObjectVersions GetCollectionMembers(ObjVer ObjVer)
+        public int CreateNewObjectExQuick(int objectType, PropertyValues properties, SourceObjectFiles sourceFiles, bool sfd, bool checkIn, AccessControlList accessControlList = null)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersions GetHistory(ObjID ObjID)
+        public ObjectVersionAndProperties CreateNewSFDObject(int objectType, PropertyValues properties, SourceObjectFile sourceFile, bool checkIn, AccessControlList accessControlList = null)
         {
             throw new NotImplementedException();
         }
 
-        public ObjVer GetLatestObjVer(ObjID ObjID, bool AllowCheckedOut, bool UpdateFromServer = false)
+        public int CreateNewSFDObjectQuick(int objectType, PropertyValues properties, SourceObjectFile sourceFile, bool checkIn, AccessControlList accessControlList = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DelayedCheckIn(ObjVer objVer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DestroyObject(ObjID objID, bool destroyAllVersions, int objectVersion)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DestroyObjects(ObjIDs objIDs)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ObjectVersion ForceUndoCheckout(ObjVer objVer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ObjectVersions GetCollectionMembers(ObjVer objVer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ObjectVersions GetHistory(ObjID objID)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ObjVer GetLatestObjVer(ObjID objID, bool allowCheckedOut, bool updateFromServer = false)
         {
             // TODO: handle AllowCheckedOut and UpdateFromServer
             List<TestObjectVersionAndProperties> thisObj =
-                this.vault.ovaps.Where(obj => obj.ObjVer.ID == ObjID.ID && obj.ObjVer.Type == ObjID.Type).ToList();
+                vault.ovaps.Where(obj => obj.ObjVer.ID == objID.ID && obj.ObjVer.Type == objID.Type).ToList();
             if (thisObj.Count == 0)
                 return null;
             int maxVersion = thisObj.Max(obj => obj.ObjVer.Version);
@@ -164,15 +179,15 @@ namespace MFiles.TestSuite.MockObjectModels
             return objectVersionAndProperties == null ? null : objectVersionAndProperties.ObjVer;
         }
 
-        public ObjVer GetLatestObjVerEx(ObjID ObjID, bool AllowCheckedOut, bool UpdateFromServer = false, bool NotifyViews = false)
+        public ObjVer GetLatestObjVerEx(ObjID objID, bool allowCheckedOut, bool updateFromServer = false, bool notifyViews = false)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties GetLatestObjectVersionAndProperties(ObjID ObjID, bool AllowCheckedOut, bool UpdateFromServer = false)
+        public ObjectVersionAndProperties GetLatestObjectVersionAndProperties(ObjID objID, bool allowCheckedOut, bool updateFromServer = false)
         {
             // TODO: use arguments
-            List<TestObjectVersionAndProperties> thisObj = this.vault.ovaps.Where(obj => obj.ObjVer.ID == ObjID.ID && obj.ObjVer.Type == ObjID.Type).ToList();
+            List<TestObjectVersionAndProperties> thisObj = vault.ovaps.Where(obj => obj.ObjVer.ID == objID.ID && obj.ObjVer.Type == objID.Type).ToList();
             if (thisObj.Count == 0)
                 return null;
             int maxObj = thisObj.Max(obj => obj.ObjVer.Version);
@@ -180,10 +195,10 @@ namespace MFiles.TestSuite.MockObjectModels
             return ovap;
         }
 
-		public TestObjectVersionAndProperties GetLatestTestObjectVersionAndProperties( ObjID ObjID, bool AllowCheckedOut, bool UpdateFromServer = false )
+		public TestObjectVersionAndProperties GetLatestTestObjectVersionAndProperties( ObjID objID, bool allowCheckedOut, bool updateFromServer = false )
 		{
 			// TODO: use arguments
-			List<TestObjectVersionAndProperties> thisObj = this.vault.ovaps.Where( obj => obj.ObjVer.ID == ObjID.ID && obj.ObjVer.Type == ObjID.Type ).ToList();
+			List<TestObjectVersionAndProperties> thisObj = vault.ovaps.Where( obj => obj.ObjVer.ID == objID.ID && obj.ObjVer.Type == objID.Type ).ToList();
 			if( thisObj.Count == 0 )
 				return null;
 			int maxObj = thisObj.Max( obj => obj.ObjVer.Version );
@@ -191,39 +206,39 @@ namespace MFiles.TestSuite.MockObjectModels
 			return ovap;
 		}
 
-        public string GetMFilesURLForObject(ObjID ObjID, int TargetVersion, bool SpecificVersion, MFilesURLType URLType = MFilesURLType.MFilesURLTypeShow)
+        public string GetMFilesURLForObject(ObjID objID, int targetVersion, bool specificVersion, MFilesURLType urlType = MFilesURLType.MFilesURLTypeShow)
         {
             throw new NotImplementedException();
         }
 
-        public string GetMFilesURLForObjectOrFile(ObjID ObjID, int TargetVersion = -1, bool SpecificVersion = false, int File = -1, MFilesURLType URLType = MFilesURLType.MFilesURLTypeShow)
+        public string GetMFilesURLForObjectOrFile(ObjID objID, int targetVersion = -1, bool specificVersion = false, int file = -1, MFilesURLType urlType = MFilesURLType.MFilesURLTypeShow)
         {
             throw new NotImplementedException();
         }
 
-        public ObjID GetObjIDByGUID(string ObjectGUID)
+        public ObjID GetObjIDByGUID(string objectGuid)
         {
             throw new NotImplementedException();
         }
 
-        public ObjID GetObjIDByOriginalObjID(string OriginalVaultGUID, ObjID OriginalObjID)
+        public ObjID GetObjIDByOriginalObjID(string originalVaultGuid, ObjID originalObjID)
         {
             throw new NotImplementedException();
         }
 
-        public string GetObjectGUID(ObjID ObjID)
+        public string GetObjectGUID(ObjID objID)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersion GetObjectInfo(ObjVer ObjVer, bool LatestVersion, bool UpdateFromServer = false)
+        public ObjectVersion GetObjectInfo(ObjVer objVer, bool latestVersion, bool updateFromServer = false)
         {
             // TODO: use LatestVersion and UpdateFromServer
 			List<TestObjectVersionAndProperties> thisObj =
-                this.vault.ovaps.Where(obj => obj.ObjVer.ID == ObjVer.ID && obj.ObjVer.Type == ObjVer.Type).ToList();
+                vault.ovaps.Where(obj => obj.ObjVer.ID == objVer.ID && obj.ObjVer.Type == objVer.Type).ToList();
             if (thisObj.Count == 0)
                 return null;
-            int lookupVersion = (ObjVer.Version == -1) ? thisObj.Max(obj => obj.ObjVer.Version) : ObjVer.Version;
+            int lookupVersion = (objVer.Version == -1) ? thisObj.Max(obj => obj.ObjVer.Version) : objVer.Version;
             ObjectVersionAndProperties objectVersionAndProperties = thisObj.SingleOrDefault(obj => obj.ObjVer.Version == lookupVersion);
             if (objectVersionAndProperties == null)
                 return null;
@@ -233,45 +248,45 @@ namespace MFiles.TestSuite.MockObjectModels
             return objectVersion;
         }
 
-        public ObjectVersion GetObjectInfoEx(ObjVer ObjVer, bool LatestVersion, bool UpdateFromServer = false, bool NotifyViews = false)
+        public ObjectVersion GetObjectInfoEx(ObjVer objVer, bool latestVersion, bool updateFromServer = false, bool notifyViews = false)
         {
             throw new NotImplementedException();
         }
 
-        public Strings GetObjectLocationsInView(int View, MFLatestSpecificBehavior LatestSpecificBehavior, ObjVer ObjectVersion)
+        public Strings GetObjectLocationsInView(int view, MFLatestSpecificBehavior latestSpecificBehavior, ObjVer objectVersion)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionPermissions GetObjectPermissions(ObjVer ObjVer)
+        public ObjectVersionPermissions GetObjectPermissions(ObjVer objVer)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties GetObjectVersionAndProperties(ObjVer ObjVer, bool UpdateFromServer = false)
+        public ObjectVersionAndProperties GetObjectVersionAndProperties(ObjVer objVer, bool updateFromServer = false)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersions GetRelationships(ObjVer ObjVer, MFRelationshipsMode Mode)
+        public ObjectVersions GetRelationships(ObjVer objVer, MFRelationshipsMode mode)
         {
             // TODO: far from optimal, vault.ovaps may need restructuring
             //      MFRelationshipsModeToThisObject is really bad
             List<ObjectVersion> relationships = new List<ObjectVersion>();
 
-            if(Mode == MFRelationshipsMode.MFRelationshipsModeAll || Mode == MFRelationshipsMode.MFRelationshipsModeFromThisObject)
+            if(mode == MFRelationshipsMode.MFRelationshipsModeAll || mode == MFRelationshipsMode.MFRelationshipsModeFromThisObject)
             {
-                ObjectVersionAndProperties ovap = this.vault.GetOvap(ObjVer);
+                ObjectVersionAndProperties ovap = vault.GetOvap(objVer);
                 foreach (PropertyValue propertyValue in ovap.Properties)
                 {
                     if (propertyValue.Value.IsNULL())
                         continue;
-                    PropertyDef pdef = this.vault.propertyDefs.Single(pd => pd.PropertyDef.ID == propertyValue.PropertyDef).PropertyDef;
+                    PropertyDef pdef = vault.propertyDefs.Single(pd => pd.PropertyDef.ID == propertyValue.PropertyDef).PropertyDef;
                     if (pdef.ID <= 101)
                         continue;
                     if(!pdef.BasedOnValueList)
                         continue;
-                    ObjType ot = this.vault.objTypes.Single(ota => ota.ObjectType.ID == pdef.ValueList).ObjectType;
+                    ObjType ot = vault.objTypes.Single(ota => ota.ObjectType.ID == pdef.ValueList).ObjectType;
                     if (!ot.RealObjectType)
                         continue;
                     if (propertyValue.Value.DataType == MFDataType.MFDatatypeMultiSelectLookup)
@@ -284,7 +299,7 @@ namespace MFiles.TestSuite.MockObjectModels
 								continue;
                             if (relationships.SingleOrDefault(obj => obj.ObjVer.ID == value.Item && obj.ObjVer.Type == value.ObjectType) == null)
                             {
-                                relationships.Add(value.GetAsObjectVersion(this.vault, true));
+                                relationships.Add(value.GetAsObjectVersion(vault, true));
                             }
                         }
                     }
@@ -293,20 +308,20 @@ namespace MFiles.TestSuite.MockObjectModels
                         Lookup value = propertyValue.Value.GetValueAsLookup();
                         if(relationships.SingleOrDefault(obj => obj.ObjVer.ID == value.Item && obj.ObjVer.Type == value.ObjectType) == null)
                         {
-                            relationships.Add(value.GetAsObjectVersion(this.vault, true));
+                            relationships.Add(value.GetAsObjectVersion(vault, true));
                         }
                     }
                 }
             }
-            if(Mode == MFRelationshipsMode.MFRelationshipsModeAll || Mode == MFRelationshipsMode.MFRelationshipsModeToThisObject)
+            if(mode == MFRelationshipsMode.MFRelationshipsModeAll || mode == MFRelationshipsMode.MFRelationshipsModeToThisObject)
             {
-                List<PropertyDef> propertiesThatReferenceThisObjType = this.vault.propertyDefs
+                List<PropertyDef> propertiesThatReferenceThisObjType = vault.propertyDefs
                     .Select(pda => pda.PropertyDef)
-                    .Where(pd => pd.BasedOnValueList && pd.ValueList == ObjVer.Type)
+                    .Where(pd => pd.BasedOnValueList && pd.ValueList == objVer.Type)
                     .ToList();
-                foreach (ObjectVersionAndProperties ovap in this.vault.ovaps)
+                foreach (ObjectVersionAndProperties ovap in vault.ovaps)
                 {
-                    if(this.vault.ObjectOperations.GetLatestObjVer(ovap.ObjVer.ObjID, true, true).Version != ovap.ObjVer.Version)
+                    if(vault.ObjectOperations.GetLatestObjVer(ovap.ObjVer.ObjID, true, true).Version != ovap.ObjVer.Version)
                         continue; // Only do latest version
 					if(ovap.VersionData.Deleted)
 						continue;
@@ -320,7 +335,7 @@ namespace MFiles.TestSuite.MockObjectModels
                         {
                             foreach (Lookup valueAsLookup in ovap.Properties.SearchForProperty(propertyDef.ID).Value.GetValueAsLookups())
                             {
-                                if (valueAsLookup.Item != ObjVer.ID)
+                                if (valueAsLookup.Item != objVer.ID)
                                     continue;
                                 if (relationships.SingleOrDefault(obj => obj.ObjVer.ID == ovap.ObjVer.ID && obj.ObjVer.Type == ovap.ObjVer.Type) == null)
                                 {
@@ -330,7 +345,7 @@ namespace MFiles.TestSuite.MockObjectModels
                         }
                         else if(propertyDef.DataType == MFDataType.MFDatatypeLookup)
                         {
-                            if(ovap.Properties.SearchForProperty(propertyDef.ID).Value.GetLookupID() != ObjVer.ID)
+                            if(ovap.Properties.SearchForProperty(propertyDef.ID).Value.GetLookupID() != objVer.ID)
                                 continue;
                             if (relationships.SingleOrDefault(obj => obj.ObjVer.ID == ovap.ObjVer.ID && obj.ObjVer.Type == ovap.ObjVer.Type) == null)
                             {
@@ -350,159 +365,159 @@ namespace MFiles.TestSuite.MockObjectModels
             return objectVersions;
         }
 
-        public byte[] GetThumbnailAsBytes(ObjVer ObjVer, FileVer FileVer, int Width, int Height, bool GetFileIconThumbnailIfRealThumbnailNotAvailable)
+        public byte[] GetThumbnailAsBytes(ObjVer objVer, FileVer fileVer, int width, int height, bool getFileIconThumbnailIfRealThumbnailNotAvailable)
         {
             throw new NotImplementedException();
         }
 
-        public bool IsCheckedOut(ObjID ObjID, bool UpdateFromServer = false)
+        public bool IsCheckedOut(ObjID objID, bool updateFromServer = false)
         {
             throw new NotImplementedException();
         }
 
-        public bool IsSingleFileObject(ObjVer ObjVer)
+        public bool IsSingleFileObject(ObjVer objVer)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties NotifyObjectAccess(ObjID ObjID)
+        public ObjectVersionAndProperties NotifyObjectAccess(ObjID objID)
         {
             throw new NotImplementedException();
         }
 
-        public bool ProposeCheckOutForFile(IntPtr ParentWindow, ObjectVersionFile ObjVersionFile, bool CanCancel)
+        public bool ProposeCheckOutForFile(IntPtr parentWindow, ObjectVersionFile objVersionFile, bool canCancel)
         {
             throw new NotImplementedException();
         }
 
-        public void RejectCheckInReminder(ObjVer ObjVer)
+        public void RejectCheckInReminder(ObjVer objVer)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndProperties RemoveFavorite(ObjID ObjID)
+        public ObjectVersionAndProperties RemoveFavorite(ObjID objID)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersionAndPropertiesOfMultipleObjects RemoveFavorites(ObjIDs ObjIDs)
+        public ObjectVersionAndPropertiesOfMultipleObjects RemoveFavorites(ObjIDs objIDs)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersion RemoveObject(ObjID ObjID)
+        public ObjectVersion RemoveObject(ObjID objID)
         {
-	        TestObjectVersionAndProperties ovap = GetLatestTestObjectVersionAndProperties( ObjID, false, false );
+	        TestObjectVersionAndProperties ovap = GetLatestTestObjectVersionAndProperties( objID, false, true );
 	        ovap.versionData.deleted = true;
 	        return ovap.VersionData;
         }
 
-        public ObjectVersions ResolveConflict(ObjID ParticipantObjID, bool KeepThis)
+        public ObjectVersions ResolveConflict(ObjID participantObjID, bool keepThis)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersion Rollback(ObjID ObjID, int RollbackToVersion)
+        public ObjectVersion Rollback(ObjID objID, int rollbackToVersion)
         {
             throw new NotImplementedException();
         }
 
-        public void SetObjectGUID(ObjID ObjID, string ObjectGUID)
+        public void SetObjectGUID(ObjID objID, string objectGuid)
         {
             throw new NotImplementedException();
         }
 
-        public void SetOfflineAvailability(ObjID ObjID, bool AvailableInOfflineMode)
+        public void SetOfflineAvailability(ObjID objID, bool availableInOfflineMode)
         {
             throw new NotImplementedException();
         }
 
-        public void SetSingleFileObject(ObjVer ObjVer, bool SingleFile)
+        public void SetSingleFileObject(ObjVer objVer, bool singleFile)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectWindowResult ShowBasicEditObjectWindow(IntPtr ParentWindow, ObjVer ObjVer)
+        public ObjectWindowResult ShowBasicEditObjectWindow(IntPtr parentWindow, ObjVer objVer)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectWindowResult ShowBasicNewObjectWindow(IntPtr ParentWindow, ObjType ObjectType)
+        public ObjectWindowResult ShowBasicNewObjectWindow(IntPtr parentWindow, ObjType objectType)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersion ShowCheckInReminder(IntPtr ParentWindow, ObjVer ObjVer, bool Asynchronous)
+        public ObjectVersion ShowCheckInReminder(IntPtr parentWindow, ObjVer objVer, bool asynchronous)
         {
             throw new NotImplementedException();
         }
 
-        public bool ShowCheckInReminderDialogModal(IntPtr ParentWindow, ObjVer ObjVer, bool ApplyEnvironmentConditions)
+        public bool ShowCheckInReminderDialogModal(IntPtr parentWindow, ObjVer objVer, bool applyEnvironmentConditions)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersion ShowCheckoutPrompt(IntPtr ParentWindow, string Message, ObjID ObjID, bool ShowCancel, bool AutoRejectConsequentPrompts = false)
+        public ObjectVersion ShowCheckoutPrompt(IntPtr parentWindow, string message, ObjID objID, bool showCancel, bool autoRejectConsequentPrompts = false)
         {
             throw new NotImplementedException();
         }
 
-        public void ShowCollectionMembersDialog(IntPtr ParentWindow, ObjVer ObjectVersion, bool Modeless = false)
+        public void ShowCollectionMembersDialog(IntPtr parentWindow, ObjVer objectVersion, bool modeless = false)
         {
             throw new NotImplementedException();
         }
 
-        public void ShowCommentsDialogModal(IntPtr ParentWindow, ObjID ObjectID)
+        public void ShowCommentsDialogModal(IntPtr parentWindow, ObjID objectID)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectWindowResult ShowEditObjectWindow(IntPtr ParentWindow, MFObjectWindowMode Mode, ObjVer ObjVer)
+        public ObjectWindowResult ShowEditObjectWindow(IntPtr parentWindow, MFObjectWindowMode mode, ObjVer objVer)
         {
             throw new NotImplementedException();
         }
 
-        public void ShowHistoryDialogModal(IntPtr ParentWindow, ObjID ObjectID)
+        public void ShowHistoryDialogModal(IntPtr parentWindow, ObjID objectID)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectWindowResult ShowNewObjectWindow(IntPtr ParentWindow, MFObjectWindowMode Mode, ObjectCreationInfo ObjectCreationInfo)
+        public ObjectWindowResult ShowNewObjectWindow(IntPtr parentWindow, MFObjectWindowMode mode, ObjectCreationInfo objectCreationInfo)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectWindowResult ShowPrefilledNewObjectWindow(IntPtr ParentWindow, MFObjectWindowMode Mode, ObjectCreationInfo ObjectCreationInfo, PropertyValues PrefilledPropertyValues = null, AccessControlList AccessControlList = null)
+        public ObjectWindowResult ShowPrefilledNewObjectWindow(IntPtr parentWindow, MFObjectWindowMode mode, ObjectCreationInfo objectCreationInfo, PropertyValues prefilledPropertyValues = null, AccessControlList accessControlList = null)
         {
             throw new NotImplementedException();
         }
 
-        public void ShowRelatedObjects(IntPtr ParentWindow, ObjID SourceObject, ObjectTypeTargetForBrowsing ObjectTypeTargetForBrowsing, string ViewSelectionDialogInfoText = "")
+        public void ShowRelatedObjects(IntPtr parentWindow, ObjID sourceObject, ObjectTypeTargetForBrowsing objectTypeTargetForBrowsing, string viewSelectionDialogInfoText = "")
         {
             throw new NotImplementedException();
         }
 
-        public void ShowRelationshipsDialog(IntPtr ParentWindow, ObjVer ObjectVersion, bool Modeless = false)
+        public void ShowRelationshipsDialog(IntPtr parentWindow, ObjVer objectVersion, bool modeless = false)
         {
             throw new NotImplementedException();
         }
 
-        public ObjOrFileVer ShowSelectObjectHistoryDialogModal(IntPtr ParentWindow, ObjID ObjectID, string WindowTitle = "")
+        public ObjOrFileVer ShowSelectObjectHistoryDialogModal(IntPtr parentWindow, ObjID objectID, string windowTitle = "")
         {
             throw new NotImplementedException();
         }
 
-        public void ShowSubObjectsDialogModal(IntPtr ParentWindow, ObjVer ObjectVersion)
+        public void ShowSubObjectsDialogModal(IntPtr parentWindow, ObjVer objectVersion)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersion UndeleteObject(ObjID ObjID)
+        public ObjectVersion UndeleteObject(ObjID objID)
         {
             throw new NotImplementedException();
         }
 
-        public ObjectVersion UndoCheckout(ObjVer ObjVer)
+        public ObjectVersion UndoCheckout(ObjVer objVer)
         {
             throw new NotImplementedException();
         }
