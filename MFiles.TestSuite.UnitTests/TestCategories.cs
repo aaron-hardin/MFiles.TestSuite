@@ -1,4 +1,4 @@
-﻿namespace MFiles.TestSuite
+﻿namespace MFiles.TestSuite.UnitTests
 {
     /// <summary>
     /// Constant strings used for test categories, this is to avoid miss-spelling

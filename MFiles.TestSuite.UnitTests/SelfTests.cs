@@ -1,4 +1,7 @@
-﻿using MFilesAPI;
+﻿using System.IO;
+using System.Reflection;
+using MFiles.TestSuite.MockObjectModels;
+using MFilesAPI;
 using NUnit.Framework;
 
 namespace MFiles.TestSuite.UnitTests
@@ -19,9 +22,23 @@ namespace MFiles.TestSuite.UnitTests
         }
 
 	    [Test]
-	    public void TestFail()
+	    public void TestCreate()
 	    {
-		    Assert.Fail("Testing build process.");
+		    Assembly current = Assembly.GetAssembly(typeof (StructureGenerator));
+		    Stream stream = current.GetManifestResourceStream(typeof (StructureGenerator), "VaultStructure.json");
+
+			if(stream == null)
+				Assert.Fail("Failed to load stream.");
+
+		    TestVault vault = TestVault.FromStream(stream);
+
+			PropertyValues pvs = new PropertyValues();
+			PropertyValue pv = new PropertyValue {PropertyDef = (int) MFBuiltInPropertyDef.MFBuiltInPropertyDefClass};
+		    pv.TypedValue.SetValue(MFDataType.MFDatatypeLookup, 0);
+			pvs.Add(-1, pv);
+		    vault.ObjectOperations.CreateNewObject(0, pvs);
+
+			Assert.AreEqual(1, vault.ovaps.Count, "Number of objects != 1");
 	    }
     }
 }
