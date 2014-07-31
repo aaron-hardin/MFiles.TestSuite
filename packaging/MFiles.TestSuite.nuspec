@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package >
+<package>
   <metadata>
     <id>MFiles.TestSuite</id>
     <version>0.0.0</version>
@@ -10,21 +10,21 @@
     <iconUrl>https://raw.githubusercontent.com/aaron-hardin/MFiles.TestSuite/master/vault.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Package for mock objects to test M-Files applications.</description>
-    <releaseNotes></releaseNotes>
+    <releaseNotes/>
     <copyright>Copyright 2014</copyright>
     <tags>M-Files</tags>
-	<references>
-		<reference file="MFiles.TestSuite.dll" />
-	</references>
-	<dependencies>
+    <references>
+      <reference file="MFiles.TestSuite.dll"/>
+    </references>
+    <dependencies>
       <dependency id="MFiles.VaultJsonTools"/>
-    </dependencies> 
+    </dependencies>
   </metadata>
   <files>
-	<file src="..\MFiles.TestSuite\bin\Release\MFiles.TestSuite.dll" target="lib\net45"/>
-	<file src="..\MFiles.TestSuite\bin\Release\MFiles.TestSuite.pdb" target="lib\net45"/>
-	<file src="..\MFiles.TestSuite\bin\Release\MFiles.TestSuite.dll" target="lib\net40"/>
-	<file src="..\MFiles.TestSuite\bin\Release\MFiles.TestSuite.pdb" target="lib\net40"/>
-	<file src="..\MFiles.TestSuite\**\*.cs" target="src" />
+    <file src="..\MFiles.TestSuite\bin\Release\MFiles.TestSuite.dll" target="lib\net45"/>
+    <file src="..\MFiles.TestSuite\bin\Release\MFiles.TestSuite.pdb" target="lib\net45"/>
+    <file src="..\MFiles.TestSuite\bin\Release\MFiles.TestSuite.dll" target="lib\net40"/>
+    <file src="..\MFiles.TestSuite\bin\Release\MFiles.TestSuite.pdb" target="lib\net40"/>
+    <file src="..\MFiles.TestSuite\**\*.cs" target="src"/>
   </files>
 </package>
