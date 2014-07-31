@@ -16,6 +16,9 @@
 	<references>
 		<reference file="MFiles.TestSuite.dll" />
 	</references>
+	<dependencies>
+      <dependency id="MFiles.VaultJsonTools"/>
+    </dependencies> 
   </metadata>
   <files>
 	<file src="..\MFiles.TestSuite\bin\Release\MFiles.TestSuite.dll" target="lib\net45"/>
