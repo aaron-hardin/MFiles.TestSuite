@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using MFiles.TestSuite.ComModels;
+﻿using MFiles.VaultJsonTools.ComModels;
 using MFilesAPI;
 
 namespace MFiles.TestSuite.MockObjectModels

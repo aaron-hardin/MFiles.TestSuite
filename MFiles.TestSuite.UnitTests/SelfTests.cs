@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 using MFiles.TestSuite.MockObjectModels;
+using MFiles.VaultJsonTools;
 using MFilesAPI;
 using NUnit.Framework;
 
@@ -24,8 +25,8 @@ namespace MFiles.TestSuite.UnitTests
 	    [Test]
 	    public void TestCreate()
 	    {
-		    Assembly current = Assembly.GetAssembly(typeof (StructureGenerator));
-		    Stream stream = current.GetManifestResourceStream(typeof (StructureGenerator), "VaultStructure.json");
+		    Assembly current = Assembly.GetAssembly(typeof (Tools));
+			Stream stream = current.GetManifestResourceStream(typeof(Tools), "VaultStructure.json");
 
 			if(stream == null)
 				Assert.Fail("Failed to load stream.");

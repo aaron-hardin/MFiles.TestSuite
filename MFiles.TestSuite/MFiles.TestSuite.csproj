@@ -31,8 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\redist\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="MFiles.VaultJsonTools">
+      <HintPath>..\packages\MFiles.VaultJsonTools.0.0.3\lib\net40\MFiles.VaultJsonTools.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -47,44 +51,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComModels\VaultJSON.cs" />
-    <Compile Include="ComModels\xAccessControlEntryContainer.cs" />
-    <Compile Include="ComModels\xAccessControlList.cs" />
-    <Compile Include="ComModels\xAccessControlListComponent.cs" />
-    <Compile Include="ComModels\xActionConvertToPDF.cs" />
-    <Compile Include="ComModels\xActionCreateAssignment.cs" />
-    <Compile Include="ComModels\xActionSendNotification.cs" />
-    <Compile Include="ComModels\xActionSetPermissions.cs" />
-    <Compile Include="ComModels\xActionSetProperties.cs" />
-    <Compile Include="ComModels\xAssociatedPropertyDef.cs" />
-    <Compile Include="ComModels\xAutomaticPermissions.cs" />
-    <Compile Include="ComModels\xAutomaticValue.cs" />
-    <Compile Include="ComModels\xDefaultProperty.cs" />
-    <Compile Include="ComModels\xExpression.cs" />
-    <Compile Include="ComModels\xIndirectPropertyIDLevel.cs" />
-    <Compile Include="ComModels\xNamedACL.cs" />
-    <Compile Include="ComModels\xObjectClass.cs" />
-    <Compile Include="ComModels\xObjectClassAdmin.cs" />
-    <Compile Include="ComModels\xObjectTypeTargetForBrowsing.cs" />
-    <Compile Include="ComModels\xObjType.cs" />
-    <Compile Include="ComModels\xObjTypeAdmin.cs" />
-    <Compile Include="ComModels\xObjTypeColumnMapping.cs" />
-    <Compile Include="ComModels\xOCROptions.cs" />
-    <Compile Include="ComModels\xOCRZone.cs" />
-    <Compile Include="ComModels\xOwnerPropertyDef.cs" />
-    <Compile Include="ComModels\xPropertyDef.cs" />
-    <Compile Include="ComModels\xPropertyDefAdmin.cs" />
-    <Compile Include="ComModels\xPropertyDefOrObjectType.cs" />
-    <Compile Include="ComModels\xSearchCondition.cs" />
-    <Compile Include="ComModels\xSignatureSettings.cs" />
-    <Compile Include="ComModels\xStateAdmin.cs" />
-    <Compile Include="ComModels\xStateConditions.cs" />
-    <Compile Include="ComModels\xStateTransition.cs" />
-    <Compile Include="ComModels\xTypedValue.cs" />
-    <Compile Include="ComModels\xUserOrUserGroupIDEx.cs" />
-    <Compile Include="ComModels\xValidation.cs" />
-    <Compile Include="ComModels\xWorkflow.cs" />
-    <Compile Include="ComModels\xWorkflowAdmin.cs" />
     <Compile Include="MockObjectModels\TestAccessControlEntryContainer.cs" />
     <Compile Include="MockObjectModels\TestAccessControlList.cs" />
     <Compile Include="MockObjectModels\TestAccessControlListComponent.cs" />
@@ -139,9 +105,8 @@
     <Compile Include="MockObjectModels\TestWorkflowAdmin.cs" />
     <Compile Include="MockObjectModels\TestWorkflowOperations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StructureGenerator.cs" />
+    <Compile Include="Tools.cs" />
     <Compile Include="VaultExtensions\LookupExtensionMethods.cs" />
-    <Compile Include="VaultSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="VaultStructure.json" />
@@ -156,6 +121,9 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

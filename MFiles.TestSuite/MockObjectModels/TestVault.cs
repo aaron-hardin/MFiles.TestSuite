@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using MFiles.TestSuite.ComModels;
+using MFiles.VaultJsonTools;
+using MFiles.VaultJsonTools.ComModels;
 using MFilesAPI;
 using Newtonsoft.Json;
 
