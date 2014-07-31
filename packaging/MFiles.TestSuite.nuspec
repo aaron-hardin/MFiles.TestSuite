@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>MFiles.TestSuite</id>
-    <version>$version$</version>
+    <version>0.0.0</version>
     <title>MFiles.TestSuite</title>
     <authors>Aaron Hardin</authors>
     <owners>Aaron Hardin</owners>
@@ -23,12 +23,8 @@
   <files>
 	<file src="..\MFiles.TestSuite\bin\Release\MFiles.TestSuite.dll" target="lib\net45"/>
 	<file src="..\MFiles.TestSuite\bin\Release\MFiles.TestSuite.pdb" target="lib\net45"/>
-	<file src="..\redist\Newtonsoft.Json.dll" target="lib\net45"/>
-	<file src="..\redist\nunit.framework.dll" target="lib\net45"/>
 	<file src="..\MFiles.TestSuite\bin\Release\MFiles.TestSuite.dll" target="lib\net40"/>
 	<file src="..\MFiles.TestSuite\bin\Release\MFiles.TestSuite.pdb" target="lib\net40"/>
-	<file src="..\redist\Newtonsoft.Json.dll" target="lib\net40"/>
-	<file src="..\redist\nunit.framework.dll" target="lib\net40"/>
 	<file src="..\MFiles.TestSuite\**\*.cs" target="src" />
   </files>
 </package>
