@@ -38,7 +38,7 @@ namespace MFiles.TestSuite.Metrics
 			action();
 			if( logresults )
 			{
-				LoggingMethod( "The following was called in the action." );
+				LoggingMethod( "The following was called in the action:" );
 				foreach( CalledMethod calledMethod in MethodsCalled )
 				{
 					CalledMethod previousCall =
@@ -46,16 +46,16 @@ namespace MFiles.TestSuite.Metrics
 							call => call.ClassName == calledMethod.ClassName && call.MethodName == calledMethod.MethodName );
 					if( previousCall == null )
 					{
-						LoggingMethod( calledMethod );
+						LoggingMethod( "\t" + calledMethod );
 					}
 					else if( previousCall.Count != calledMethod.Count )
 					{
 						CalledMethod method = calledMethod.Clone();
 						method.Count -= previousCall.Count;
-						LoggingMethod( method );
+						LoggingMethod( "\t" + method );
 					}
 				}
-				LoggingMethod( "End Action." );
+				LoggingMethod( "End Action.\n" );
 			}
 			TrackMetrics = trackMetricsWas;
 		}

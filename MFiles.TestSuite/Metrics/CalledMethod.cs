@@ -11,7 +11,8 @@
 			CalledMethod method = new CalledMethod
 			{
 				ClassName = ClassName,
-				MethodName = MethodName
+				MethodName = MethodName,
+				Count = Count
 			};
 			return method;
 		}

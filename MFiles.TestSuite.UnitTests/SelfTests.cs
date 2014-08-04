@@ -91,7 +91,7 @@ namespace MFiles.TestSuite.UnitTests
 			vault.MetricGatherer.CallWithLogging( () => 
 			{
 				ovap = vault.ObjectOperations.CreateNewObject( 0, pvs );
-			} );
+			}, true );
 			Assert.AreNotEqual( 0, vault.MetricGatherer.MethodsCalled.Count );
 			
 			Assert.AreEqual( 1, vault.ovaps.Count, "Number of objects != 1" );
