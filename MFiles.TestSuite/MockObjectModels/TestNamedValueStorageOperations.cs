@@ -3,54 +3,64 @@ using MFilesAPI;
 
 namespace MFiles.TestSuite.MockObjectModels
 {
-    public class TestNamedValueStorageOperations : VaultNamedValueStorageOperations
-    {
-        private TestVault vault;
+	public class TestNamedValueStorageOperations : VaultNamedValueStorageOperations
+	{
+		private TestVault vault;
 
-        public TestNamedValueStorageOperations(TestVault vault)
-        {
-            this.vault = vault;
-        }
+		public TestNamedValueStorageOperations( TestVault vault )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public NamedValues GetNamedValues(MFNamedValueType NamedValueType, string Namespace)
-        {
-            // TODO: fix this
-            switch (NamedValueType)
-            {
-                case MFNamedValueType.MFConfigurationValue:
-                    if (this.vault.namedValues.ContainsKey(Namespace))
-                        return this.vault.namedValues[Namespace];
-                    return new NamedValues();
-                default:
-                    throw new NotImplementedException(string.Format("TestNamedValueStorageOperations::GetNamedValues NamedValueType {0} not yet implemented", NamedValueType));
-            }
-            return new NamedValues();
-            //throw new NotImplementedException();
-        }
+			this.vault = vault;
+		}
 
-        public void RemoveNamedValues(MFNamedValueType NamedValueType, string Namespace, Strings NamedValueNames)
-        {
-            throw new NotImplementedException();
-        }
+		public NamedValues GetNamedValues( MFNamedValueType namedValueType, string Namespace )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public void SetNamedValues(MFNamedValueType NamedValueType, string Namespace, NamedValues NamedValues)
-        {
-            // TODO: fix this
-            switch (NamedValueType)
-            {
-                case MFNamedValueType.MFConfigurationValue:
-                    if (this.vault.namedValues.ContainsKey(Namespace))
-                    {
-                        this.vault.namedValues[Namespace] = NamedValues;
-                    }
-                    else
-                    {
-                        this.vault.namedValues.Add(Namespace, NamedValues);
-                    }
-                    break;
-                default:
-                    throw new NotImplementedException(string.Format("TestNamedValueStorageOperations::GetNamedValues NamedValueType {0} not yet implemented", NamedValueType));
-            }
-        }
-    }
+			// TODO: fix this
+			switch( namedValueType )
+			{
+				case MFNamedValueType.MFConfigurationValue:
+					if( vault.namedValues.ContainsKey( Namespace ) )
+						return vault.namedValues[ Namespace ];
+					return new NamedValues();
+				default:
+					throw new NotImplementedException(
+						string.Format( "TestNamedValueStorageOperations::GetNamedValues NamedValueType {0} not yet implemented",
+							namedValueType ) );
+			}
+			//return new NamedValues();
+			//throw new NotImplementedException();
+		}
+
+		public void RemoveNamedValues( MFNamedValueType namedValueType, string Namespace, Strings namedValueNames )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public void SetNamedValues( MFNamedValueType namedValueType, string Namespace, NamedValues namedValues )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			// TODO: fix this
+			switch( namedValueType )
+			{
+			case MFNamedValueType.MFConfigurationValue:
+				if( vault.namedValues.ContainsKey( Namespace ) )
+				{
+					vault.namedValues[ Namespace ] = namedValues;
+				}
+				else
+				{
+					vault.namedValues.Add( Namespace, namedValues );
+				}
+				break;
+			default:
+				throw new NotImplementedException( string.Format( "TestNamedValueStorageOperations::GetNamedValues NamedValueType {0} not yet implemented", namedValueType ) );
+			}
+		}
+	}
 }
