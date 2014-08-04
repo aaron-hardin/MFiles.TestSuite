@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using MFiles.TestSuite.Metrics;
 using MFiles.VaultJsonTools;
 using MFiles.VaultJsonTools.ComModels;
 using MFilesAPI;
@@ -30,6 +31,8 @@ namespace MFiles.TestSuite.MockObjectModels
         private VaultPropertyDefOperations propertyDefOperations;
         private VaultWorkflowOperations workflowOperations;
         private VaultNamedValueStorageOperations namedValueStorageOperations;
+
+		public MetricGatherer MetricGatherer = new MetricGatherer();
 
         public TestVault()
         {

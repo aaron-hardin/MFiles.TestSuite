@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Metrics\CalledMethod.cs" />
+    <Compile Include="Metrics\MetricGatherer.cs" />
     <Compile Include="MockObjectModels\TestAccessControlEntryContainer.cs" />
     <Compile Include="MockObjectModels\TestAccessControlList.cs" />
     <Compile Include="MockObjectModels\TestAccessControlListComponent.cs" />
