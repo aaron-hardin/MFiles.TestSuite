@@ -4,123 +4,155 @@ using MFilesAPI;
 
 namespace MFiles.TestSuite.MockObjectModels
 {
-    public class TestWorkflowOperations : VaultWorkflowOperations
-    {
-        private TestVault vault;
+	public class TestWorkflowOperations : VaultWorkflowOperations
+	{
+		private TestVault vault;
 
-        public TestWorkflowOperations(TestVault vault)
-        {
-            this.vault = vault;
-        }
+		public TestWorkflowOperations( TestVault vault )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public WorkflowAdmin AddWorkflowAdmin(WorkflowAdmin Workflow)
-        {
-            // TODO: verify
-            this.vault.workflows.Add(Workflow);
+			this.vault = vault;
+		}
 
-            ValueListItem valueListItemWorkflow = new ValueListItem { ID = Workflow.Workflow.ID, Name = Workflow.Workflow.Name };
-            this.vault.ValueListItemOperations.AddValueListItem((int)MFBuiltInValueList.MFBuiltInValueListWorkflows,
-                valueListItemWorkflow);
-            for (int i = 1; i <= Workflow.States.Count; ++i)
-            {
-                StateAdmin stateAdmin = Workflow.States[i];
-                ValueListItem valueListItemState = new ValueListItem { ID = stateAdmin.ID, Name = stateAdmin.Name, OwnerID = Workflow.Workflow.ID };
-                this.vault.ValueListItemOperations.AddValueListItem((int) MFBuiltInValueList.MFBuiltInValueListStates,
-                    valueListItemState);
-            }
-            return Workflow;
-        }
+		public WorkflowAdmin AddWorkflowAdmin( WorkflowAdmin workflow )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public SignatureSettings GetStateTransitionSignatureSettings(int FromState, int ToState)
-        {
-            throw new NotImplementedException();
-        }
+			// TODO: verify
+			vault.workflows.Add( workflow );
 
-        public WorkflowAdmin GetWorkflowAdmin(int WorkflowID)
-        {
-	        return vault.workflows.SingleOrDefault(wf => wf.Workflow.ID == WorkflowID);
-            // TODO: verify
-        }
+			ValueListItem valueListItemWorkflow = new ValueListItem { ID = workflow.Workflow.ID, Name = workflow.Workflow.Name };
+			vault.ValueListItemOperations.AddValueListItem( ( int )MFBuiltInValueList.MFBuiltInValueListWorkflows,
+				valueListItemWorkflow );
+			for( int i = 1; i <= workflow.States.Count; ++i )
+			{
+				StateAdmin stateAdmin = workflow.States[ i ];
+				ValueListItem valueListItemState = new ValueListItem { ID = stateAdmin.ID, Name = stateAdmin.Name, OwnerID = workflow.Workflow.ID };
+				vault.ValueListItemOperations.AddValueListItem( ( int )MFBuiltInValueList.MFBuiltInValueListStates,
+					valueListItemState );
+			}
+			return workflow;
+		}
 
-        public Workflow GetWorkflowForClient(int WorkflowID, bool UpdateFromServer = false)
-        {
-            throw new NotImplementedException();
-        }
+		public SignatureSettings GetStateTransitionSignatureSettings( int fromState, int toState )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public int GetWorkflowIDByAlias(string Alias)
-        {
-            try
-            {
-                return this.vault.workflows.Single(wf => wf.SemanticAliases.Value.Split(';').Contains(Alias)).Workflow.ID;
-            }
-            catch
-            {
-                return -1;
-            }
-        }
+			throw new NotImplementedException();
+		}
 
-        public int GetWorkflowIDByGUID(string WorkflowGUID)
-        {
-            throw new NotImplementedException();
-        }
+		public WorkflowAdmin GetWorkflowAdmin( int workflowID )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public int GetWorkflowStateIDByAlias(string Alias)
-        {
-            // TODO: verify
-            int stateId = -1;
-            foreach (WorkflowAdmin workflowAdmin in this.vault.workflows)
-            {
-                for (int i = 1; i <= workflowAdmin.States.Count; ++i)
-                {
-                    StateAdmin stateAdmin = workflowAdmin.States[i];
-                    if (!stateAdmin.SemanticAliases.Value.Split(';').Contains(Alias))
-                        continue;
-                    if (stateId != -1)
-                        return -1;
-                    stateId = stateAdmin.ID;
-                }
-            }
-            return stateId;
-        }
+			return vault.workflows.SingleOrDefault( wf => wf.Workflow.ID == workflowID );
+			// TODO: verify
+		}
 
-        public int GetWorkflowStateIDByGUID(string StateGUID)
-        {
-            throw new NotImplementedException();
-        }
+		public Workflow GetWorkflowForClient( int workflowID, bool updateFromServer = false )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public States GetWorkflowStates(int Workflow, TypedValue CurrentState = null)
-        {
-            throw new NotImplementedException();
-        }
+			throw new NotImplementedException();
+		}
 
-        public States GetWorkflowStatesEx(int Workflow, TypedValue CurrentState = null, ObjVer ObjVer = null)
-        {
-            throw new NotImplementedException();
-        }
+		public int GetWorkflowIDByAlias( string alias )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public WorkflowsAdmin GetWorkflowsAdmin()
-        {
-            throw new NotImplementedException();
-        }
+			try
+			{
+				return vault.workflows.Single( wf => wf.SemanticAliases.Value.Split( ';' ).Contains( alias ) ).Workflow.ID;
+			}
+			catch
+			{
+				return -1;
+			}
+		}
 
-        public ValueListItems GetWorkflowsAsValueListItems(bool UpdateFromServer = false)
-        {
-            throw new NotImplementedException();
-        }
+		public int GetWorkflowIDByGUID( string workflowGuid )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public Workflows GetWorkflowsForClient(bool UpdateFromServer = false)
-        {
-            throw new NotImplementedException();
-        }
+			throw new NotImplementedException();
+		}
 
-        public void RemoveWorkflowAdmin(int WorkflowID)
-        {
-            throw new NotImplementedException();
-        }
+		public int GetWorkflowStateIDByAlias( string alias )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public WorkflowAdmin UpdateWorkflowAdmin(WorkflowAdmin Workflow)
-        {
-            throw new NotImplementedException();
-        }
-    }
+			// TODO: verify
+			int stateId = -1;
+			foreach( WorkflowAdmin workflowAdmin in vault.workflows )
+			{
+				for( int i = 1; i <= workflowAdmin.States.Count; ++i )
+				{
+					StateAdmin stateAdmin = workflowAdmin.States[ i ];
+					if( !stateAdmin.SemanticAliases.Value.Split( ';' ).Contains( alias ) )
+						continue;
+					if( stateId != -1 )
+						return -1;
+					stateId = stateAdmin.ID;
+				}
+			}
+			return stateId;
+		}
+
+		public int GetWorkflowStateIDByGUID( string stateGuid )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public States GetWorkflowStates( int workflow, TypedValue currentState = null )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public States GetWorkflowStatesEx( int workflow, TypedValue currentState = null, ObjVer objVer = null )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public WorkflowsAdmin GetWorkflowsAdmin()
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public ValueListItems GetWorkflowsAsValueListItems( bool updateFromServer = false )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public Workflows GetWorkflowsForClient( bool updateFromServer = false )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public void RemoveWorkflowAdmin( int workflowID )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public WorkflowAdmin UpdateWorkflowAdmin( WorkflowAdmin workflow )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+	}
 }
