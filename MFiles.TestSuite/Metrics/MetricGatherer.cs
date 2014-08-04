@@ -10,18 +10,27 @@ namespace MFiles.TestSuite.Metrics
 	public class MetricGatherer
 	{
 		public bool TrackMetrics { get; set; }
-
+		public Action<string> LoggingMethod { get; set; }
 		public List<CalledMethod> MethodsCalled; 
 
 		public MetricGatherer()
 		{
 			TrackMetrics = false;
 			MethodsCalled = new List<CalledMethod>();
+			LoggingMethod = Console.WriteLine;
 		}
 
 		public void Reset()
 		{
 			MethodsCalled = new List<CalledMethod>();
+		}
+
+		public void CallWithLogging(Action action)
+		{
+			bool trackMetricsWas = TrackMetrics;
+			TrackMetrics = true;
+			action();
+			TrackMetrics = trackMetricsWas;
 		}
 
 		public void MethodCalled()
@@ -68,14 +77,11 @@ namespace MFiles.TestSuite.Metrics
 			++method.Count;
 		}
 
-		public void PrintResults(Action<string> writeMethod = null)
+		public void PrintResults()
 		{
-			if( writeMethod == null )
-				writeMethod = Console.WriteLine;
-
 			foreach( CalledMethod calledMethod in MethodsCalled )
 			{
-				writeMethod( calledMethod.ToString() );
+				LoggingMethod( calledMethod.ToString() );
 			}
 		}
 	}

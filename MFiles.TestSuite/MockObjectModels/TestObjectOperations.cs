@@ -100,7 +100,8 @@ namespace MFiles.TestSuite.MockObjectModels
 		public ObjectVersionAndProperties CreateNewObject( int objectType, PropertyValues propertyValues,
 			SourceObjectFiles sourceObjectFiles = null, AccessControlList accessControlList = null )
 		{
-			vault.MetricGatherer.MethodCalled();
+			vault.MetricGatherer.MethodCalled();
+
 			// TODO: use parameter args
 			TestObjectVersionAndProperties ovap = CreateNewTestObject( objectType, propertyValues );
 			return ovap;
@@ -130,7 +131,8 @@ namespace MFiles.TestSuite.MockObjectModels
 		public ObjectVersionAndProperties CreateNewObjectEx( int objectType, PropertyValues properties, SourceObjectFiles sourceFiles,
 			bool sfd, bool checkIn, AccessControlList accessControlList = null )
 		{
-			vault.MetricGatherer.MethodCalled();
+			vault.MetricGatherer.MethodCalled();
+
 			// TODO: use parameter args
 			TestPropertyValue pv = new TestPropertyValue
 			{
