@@ -5,95 +5,121 @@ using MFilesAPI;
 
 namespace MFiles.TestSuite.MockObjectModels
 {
-    public class TestObjectTypeOperations : VaultObjectTypeOperations
-    {
-        private TestVault vault;
+	public class TestObjectTypeOperations : VaultObjectTypeOperations
+	{
+		private TestVault vault;
 
-        public TestObjectTypeOperations(TestVault vault)
-        {
-            this.vault = vault;
-        }
+		public TestObjectTypeOperations( TestVault vault )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public ObjTypeAdmin AddObjectTypeAdmin(ObjTypeAdmin ObjectType)
-        {
-            if (ObjectType.ObjectType.RealObjectType)
-            {
-                throw new NotImplementedException();
-            }
-            else
-            {
-                this.vault.objTypes.Add(ObjectType);
-                return ObjectType;
-            }
-        }
+			this.vault = vault;
+		}
 
-        public ObjType GetBuiltInObjectType(MFBuiltInObjectType ObjectType)
-        {
-            throw new NotImplementedException();
-        }
+		public ObjTypeAdmin AddObjectTypeAdmin( ObjTypeAdmin objectType )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public ObjType GetObjectType(int ObjectType)
-        {
-            List<ObjTypeAdmin> objectTypes = vault.objTypes.Where(obj => obj.ObjectType.ID == ObjectType).ToList();
-            if(objectTypes.Count > 1)
-                throw new Exception("hi");
-            ObjTypeAdmin ota = vault.objTypes.SingleOrDefault(obj => obj.ObjectType.ID == ObjectType);
-            return ota == null ? null : ota.ObjectType;
-        }
+			if( objectType.ObjectType.RealObjectType )
+			{
+				throw new NotImplementedException();
+			}
+			else
+			{
+				vault.objTypes.Add( objectType );
+				return objectType;
+			}
+		}
 
-        public ObjTypeAdmin GetObjectTypeAdmin(int ObjectType)
-        {
-            throw new NotImplementedException();
-        }
+		public ObjType GetBuiltInObjectType( MFBuiltInObjectType objectType )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public int GetObjectTypeIDByAlias(string Alias)
-        {
-            // TODO: check that i did not do "obj.SemanticAliases.Value.Contains(Alias)" anywhere, thats not correct...not sure how many times i did that
-            try
-            {
-                return this.vault.objTypes
-                    .Single(obj => obj.SemanticAliases != null 
-                    && obj.SemanticAliases.Value.Split(';').Contains(Alias)).ObjectType.ID;
-            }
-            catch
-            {
-                return -1;
-            }
-        }
+			throw new NotImplementedException();
+		}
 
-        public int GetObjectTypeIDByGUID(string ObjectTypeGUID)
-        {
-            throw new NotImplementedException();
-        }
+		public ObjType GetObjectType( int objectType )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public ObjTypes GetObjectTypes()
-        {
-            throw new NotImplementedException();
-        }
+			List<ObjTypeAdmin> objectTypes = vault.objTypes.Where( obj => obj.ObjectType.ID == objectType ).ToList();
+			if( objectTypes.Count > 1 )
+				throw new Exception( "hi" );
+			ObjTypeAdmin ota = vault.objTypes.SingleOrDefault( obj => obj.ObjectType.ID == objectType );
+			return ota == null ? null : ota.ObjectType;
+		}
 
-        public ObjTypesAdmin GetObjectTypesAdmin()
-        {
-            throw new NotImplementedException();
-        }
+		public ObjTypeAdmin GetObjectTypeAdmin( int objectType )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public void RefreshExternalObjectType(int ObjectType, MFExternalDBRefreshType RefreshType)
-        {
-            throw new NotImplementedException();
-        }
+			throw new NotImplementedException();
+		}
 
-        public void RemoveObjectTypeAdmin(int ObjectTypeID)
-        {
-            throw new NotImplementedException();
-        }
+		public int GetObjectTypeIDByAlias( string alias )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public ObjTypeAdmin UpdateObjectTypeAdmin(ObjTypeAdmin ObjectType)
-        {
-            throw new NotImplementedException();
-        }
+			// TODO: check that i did not do "obj.SemanticAliases.Value.Contains(Alias)" anywhere, thats not correct...not sure how many times i did that
+			try
+			{
+				return vault.objTypes
+					.Single( obj => obj.SemanticAliases != null
+					&& obj.SemanticAliases.Value.Split( ';' ).Contains( alias ) ).ObjectType.ID;
+			}
+			catch
+			{
+				return -1;
+			}
+		}
 
-        public ObjTypeAdmin UpdateObjectTypeWithAutomaticPermissionsAdmin(ObjTypeAdmin ObjectType, bool AutomaticPermissionsForcedActive = false)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public int GetObjectTypeIDByGUID( string objectTypeGuid )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public ObjTypes GetObjectTypes()
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public ObjTypesAdmin GetObjectTypesAdmin()
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public void RefreshExternalObjectType( int objectType, MFExternalDBRefreshType refreshType )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public void RemoveObjectTypeAdmin( int objectTypeID )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public ObjTypeAdmin UpdateObjectTypeAdmin( ObjTypeAdmin objectType )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public ObjTypeAdmin UpdateObjectTypeWithAutomaticPermissionsAdmin( ObjTypeAdmin objectType, bool automaticPermissionsForcedActive = false )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+	}
 }
