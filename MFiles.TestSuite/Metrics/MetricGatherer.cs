@@ -25,11 +25,38 @@ namespace MFiles.TestSuite.Metrics
 			MethodsCalled = new List<CalledMethod>();
 		}
 
-		public void CallWithLogging(Action action)
+		public void CallWithLogging(Action action, bool logresults = false)
 		{
 			bool trackMetricsWas = TrackMetrics;
 			TrackMetrics = true;
+			List<CalledMethod> previousCalls = new List<CalledMethod>();
+			if( logresults )
+			{
+				previousCalls.AddRange( MethodsCalled.Select( calledMethod => calledMethod.Clone() ) );
+				LoggingMethod( "Running action with logging." );
+			}
 			action();
+			if( logresults )
+			{
+				LoggingMethod( "The following was called in the action." );
+				foreach( CalledMethod calledMethod in MethodsCalled )
+				{
+					CalledMethod previousCall =
+						previousCalls.FirstOrDefault(
+							call => call.ClassName == calledMethod.ClassName && call.MethodName == calledMethod.MethodName );
+					if( previousCall == null )
+					{
+						LoggingMethod( calledMethod );
+					}
+					else if( previousCall.Count != calledMethod.Count )
+					{
+						CalledMethod method = calledMethod.Clone();
+						method.Count -= previousCall.Count;
+						LoggingMethod( method );
+					}
+				}
+				LoggingMethod( "End Action." );
+			}
 			TrackMetrics = trackMetricsWas;
 		}
 
