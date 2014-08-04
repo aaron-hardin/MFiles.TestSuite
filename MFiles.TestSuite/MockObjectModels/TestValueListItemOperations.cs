@@ -4,137 +4,187 @@ using MFilesAPI;
 
 namespace MFiles.TestSuite.MockObjectModels
 {
-    public class TestValueListItemOperations : VaultValueListItemOperations
-    {
-        private TestVault vault;
+	public class TestValueListItemOperations : VaultValueListItemOperations
+	{
+		private TestVault vault;
 
-        public TestValueListItemOperations(TestVault vault)
-        {
-            this.vault = vault;
-        }
+		public TestValueListItemOperations( TestVault vault )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public ValueListItem AddValueListItem(int ValueList, ValueListItem ValueListItem, bool AdministrativeOperation = false)
-        {
-            ValueListItem.ValueListID = ValueList;
-            this.vault.valueListItems.Add(ValueListItem);
-            return ValueListItem;
-        }
+			this.vault = vault;
+		}
 
-        public void ChangeAutomaticPermissionsToACL(int ValueList, int ValueListItemID, AccessControlList AccessControlList, string NameForAutomaticPermissions, bool CanDeactivate = true, MFAutomaticPermissionsOperationOptions AutomaticPermissionsOperationOptions = MFAutomaticPermissionsOperationOptions.MFAutomaticPermissionsOperationOptionsNone)
-        {
-            throw new NotImplementedException();
-        }
+		public ValueListItem AddValueListItem( int valueList, ValueListItem valueListItem, bool administrativeOperation = false )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public void ChangeAutomaticPermissionsToItemsOwnPermissions(int ValueList, int ValueListItemID, bool CanDeactivate = true, MFAutomaticPermissionsOperationOptions AutomaticPermissionsOperationOptions = MFAutomaticPermissionsOperationOptions.MFAutomaticPermissionsOperationOptionsNone)
-        {
-            throw new NotImplementedException();
-        }
+			valueListItem.ValueListID = valueList;
+			vault.valueListItems.Add( valueListItem );
+			return valueListItem;
+		}
 
-        public void ChangeAutomaticPermissionsToNamedACL(int ValueList, int ValueListItemID, int NamedACL, bool CanDeactivate = true, MFAutomaticPermissionsOperationOptions AutomaticPermissionsOperationOptions = MFAutomaticPermissionsOperationOptions.MFAutomaticPermissionsOperationOptionsNone)
-        {
-            throw new NotImplementedException();
-        }
+		public void ChangeAutomaticPermissionsToACL( int valueList, int valueListItemID, AccessControlList accessControlList, string nameForAutomaticPermissions, bool canDeactivate = true, MFAutomaticPermissionsOperationOptions automaticPermissionsOperationOptions = MFAutomaticPermissionsOperationOptions.MFAutomaticPermissionsOperationOptionsNone )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public void ChangeDefaultPermissionsToACL(int ValueList, int ValueListItemID, AccessControlList AccessControlList)
-        {
-            throw new NotImplementedException();
-        }
+			throw new NotImplementedException();
+		}
 
-        public void ChangeDefaultPermissionsToNamedACL(int ValueList, int ValueListItemID, int NamedACL)
-        {
-            throw new NotImplementedException();
-        }
+		public void ChangeAutomaticPermissionsToItemsOwnPermissions( int valueList, int valueListItemID, bool canDeactivate = true, MFAutomaticPermissionsOperationOptions automaticPermissionsOperationOptions = MFAutomaticPermissionsOperationOptions.MFAutomaticPermissionsOperationOptionsNone )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public void ChangePermissionsToACL(int ValueList, int ValueListItemID, AccessControlList AccessControlList)
-        {
-            throw new NotImplementedException();
-        }
+			throw new NotImplementedException();
+		}
 
-        public void ChangePermissionsToNamedACL(int ValueList, int ValueListItemID, int NamedACL)
-        {
-            throw new NotImplementedException();
-        }
+		public void ChangeAutomaticPermissionsToNamedACL( int valueList, int valueListItemID, int namedAcl, bool canDeactivate = true, MFAutomaticPermissionsOperationOptions automaticPermissionsOperationOptions = MFAutomaticPermissionsOperationOptions.MFAutomaticPermissionsOperationOptionsNone )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public void ClearAutomaticPermissions(int ValueList, int ValueListItemID)
-        {
-            throw new NotImplementedException();
-        }
+			throw new NotImplementedException();
+		}
 
-        public ValueListItem GetValueListItemByDisplayID(int ValueList, string ValueListItemDisplayID)
-        {
-            throw new NotImplementedException();
-        }
+		public void ChangeDefaultPermissionsToACL( int valueList, int valueListItemID, AccessControlList accessControlList )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public ValueListItem GetValueListItemByDisplayIDEx(int ValueList, string ValueListItemDisplayID, bool ReplaceCurrentUserWithCallersIdentity = true)
-        {
-            throw new NotImplementedException();
-        }
+			throw new NotImplementedException();
+		}
 
-        public ValueListItem GetValueListItemByID(int ValueList, int ValueListItemID)
-        {
-            ValueListItem item =
-                this.vault.valueListItems.SingleOrDefault(vli => vli.ValueListID == ValueList && vli.ID == ValueListItemID);
-            return item;
-        }
+		public void ChangeDefaultPermissionsToNamedACL( int valueList, int valueListItemID, int namedAcl )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public ValueListItem GetValueListItemByIDEx(int ValueList, int ValueListItemID, bool ReplaceCurrentUserWithCallersIdentity = true)
-        {
-            throw new NotImplementedException();
-        }
+			throw new NotImplementedException();
+		}
 
-        public ValueListItems GetValueListItems(int ValueList, bool UpdateFromServer = false, MFExternalDBRefreshType RefreshTypeIfExternalValueList = MFExternalDBRefreshType.MFExternalDBRefreshTypeNone)
-        {
-            throw new NotImplementedException();
-        }
+		public void ChangePermissionsToACL( int valueList, int valueListItemID, AccessControlList accessControlList )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public ValueListItems GetValueListItemsEx(int ValueList, bool UpdateFromServer = false, MFExternalDBRefreshType RefreshTypeIfExternalValueList = MFExternalDBRefreshType.MFExternalDBRefreshTypeNone, bool ReplaceCurrentUserWithCallersIdentity = true)
-        {
-            throw new NotImplementedException();
-        }
+			throw new NotImplementedException();
+		}
 
-        public ValueListItems GetValueListItemsEx2(int ValueList, bool UpdateFromServer = false, MFExternalDBRefreshType RefreshTypeIfExternalValueList = MFExternalDBRefreshType.MFExternalDBRefreshTypeNone, bool ReplaceCurrentUserWithCallersIdentity = true, int PropertyDef = -1)
-        {
-            throw new NotImplementedException();
-        }
+		public void ChangePermissionsToNamedACL( int valueList, int valueListItemID, int namedAcl )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public ValueListItemsWithPermissions GetValueListItemsWithPermissions(int ValueList, bool UpdateFromServer = false, MFExternalDBRefreshType RefreshTypeIfExternalValueList = MFExternalDBRefreshType.MFExternalDBRefreshTypeNone, bool ReplaceCurrentUserWithCallersIdentity = true, int PropertyDef = -1)
-        {
-            throw new NotImplementedException();
-        }
+			throw new NotImplementedException();
+		}
 
-        public void RemoveValueListItem(int ValueList, int Item)
-        {
-            throw new NotImplementedException();
-        }
+		public void ClearAutomaticPermissions( int valueList, int valueListItemID )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public ValueListItemSearchResults SearchForValueListItems(int ValueList, SearchConditions SearchConditions, bool UpdateFromServer = false, MFExternalDBRefreshType RefreshTypeIfExternalValueList = MFExternalDBRefreshType.MFExternalDBRefreshTypeNone)
-        {
-            throw new NotImplementedException();
-        }
+			throw new NotImplementedException();
+		}
 
-        public ValueListItemSearchResults SearchForValueListItemsEx(int ValueList, SearchConditions SearchConditions, bool UpdateFromServer = false, MFExternalDBRefreshType RefreshTypeIfExternalValueList = MFExternalDBRefreshType.MFExternalDBRefreshTypeNone, bool ReplaceCurrentUserWithCallersIdentity = true)
-        {
-            throw new NotImplementedException();
-        }
+		public ValueListItem GetValueListItemByDisplayID( int valueList, string valueListItemDisplayID )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public ValueListItemSearchResults SearchForValueListItemsEx2(int ValueList, SearchConditions SearchConditions, bool UpdateFromServer = false, MFExternalDBRefreshType RefreshTypeIfExternalValueList = MFExternalDBRefreshType.MFExternalDBRefreshTypeNone, bool ReplaceCurrentUserWithCallersIdentity = true, int PropertyDef = -1, int MaxResults = 5000)
-        {
-            throw new NotImplementedException();
-        }
+			throw new NotImplementedException();
+		}
 
-        public ValueListItemSearchResultsWithPermissions SearchForValueListItemsWithPermissions(int ValueList, SearchConditions SearchConditions, bool UpdateFromServer = false, MFExternalDBRefreshType RefreshTypeIfExternalValueList = MFExternalDBRefreshType.MFExternalDBRefreshTypeNone, bool ReplaceCurrentUserWithCallersIdentity = true, int PropertyDef = -1, int MaxResults = 5000)
-        {
-            throw new NotImplementedException();
-        }
+		public ValueListItem GetValueListItemByDisplayIDEx( int valueList, string valueListItemDisplayID, bool replaceCurrentUserWithCallersIdentity = true )
+		{
+			vault.MetricGatherer.MethodCalled();
 
-        public void UndeleteValueListItem(int ValueList, int ValueListItemID)
-        {
-            throw new NotImplementedException();
-        }
+			throw new NotImplementedException();
+		}
 
-        public void UpdateValueListItem(ValueListItem ValueListItem)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public ValueListItem GetValueListItemByID( int valueList, int valueListItemID )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			ValueListItem item =
+				vault.valueListItems.SingleOrDefault( vli => vli.ValueListID == valueList && vli.ID == valueListItemID );
+			return item;
+		}
+
+		public ValueListItem GetValueListItemByIDEx( int valueList, int valueListItemID, bool replaceCurrentUserWithCallersIdentity = true )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public ValueListItems GetValueListItems( int valueList, bool updateFromServer = false, MFExternalDBRefreshType refreshTypeIfExternalValueList = MFExternalDBRefreshType.MFExternalDBRefreshTypeNone )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public ValueListItems GetValueListItemsEx( int valueList, bool updateFromServer = false, MFExternalDBRefreshType refreshTypeIfExternalValueList = MFExternalDBRefreshType.MFExternalDBRefreshTypeNone, bool replaceCurrentUserWithCallersIdentity = true )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public ValueListItems GetValueListItemsEx2( int valueList, bool updateFromServer = false, MFExternalDBRefreshType refreshTypeIfExternalValueList = MFExternalDBRefreshType.MFExternalDBRefreshTypeNone, bool replaceCurrentUserWithCallersIdentity = true, int propertyDef = -1 )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public ValueListItemsWithPermissions GetValueListItemsWithPermissions( int valueList, bool updateFromServer = false, MFExternalDBRefreshType refreshTypeIfExternalValueList = MFExternalDBRefreshType.MFExternalDBRefreshTypeNone, bool replaceCurrentUserWithCallersIdentity = true, int propertyDef = -1 )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public void RemoveValueListItem( int valueList, int item )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public ValueListItemSearchResults SearchForValueListItems( int valueList, SearchConditions searchConditions, bool updateFromServer = false, MFExternalDBRefreshType refreshTypeIfExternalValueList = MFExternalDBRefreshType.MFExternalDBRefreshTypeNone )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public ValueListItemSearchResults SearchForValueListItemsEx( int valueList, SearchConditions searchConditions, bool updateFromServer = false, MFExternalDBRefreshType refreshTypeIfExternalValueList = MFExternalDBRefreshType.MFExternalDBRefreshTypeNone, bool replaceCurrentUserWithCallersIdentity = true )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public ValueListItemSearchResults SearchForValueListItemsEx2( int valueList, SearchConditions searchConditions, bool updateFromServer = false, MFExternalDBRefreshType refreshTypeIfExternalValueList = MFExternalDBRefreshType.MFExternalDBRefreshTypeNone, bool replaceCurrentUserWithCallersIdentity = true, int propertyDef = -1, int maxResults = 5000 )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public ValueListItemSearchResultsWithPermissions SearchForValueListItemsWithPermissions( int valueList, SearchConditions searchConditions, bool updateFromServer = false, MFExternalDBRefreshType refreshTypeIfExternalValueList = MFExternalDBRefreshType.MFExternalDBRefreshTypeNone, bool replaceCurrentUserWithCallersIdentity = true, int propertyDef = -1, int maxResults = 5000 )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public void UndeleteValueListItem( int valueList, int valueListItemID )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+
+		public void UpdateValueListItem( ValueListItem valueListItem )
+		{
+			vault.MetricGatherer.MethodCalled();
+
+			throw new NotImplementedException();
+		}
+	}
 }
