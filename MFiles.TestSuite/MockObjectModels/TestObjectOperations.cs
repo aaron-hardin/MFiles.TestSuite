@@ -71,7 +71,7 @@ namespace MFiles.TestSuite.MockObjectModels
 			TestObjectVersionAndProperties ovap = GetLatestTestObjectVersionAndProperties( objID, false );
 			TestObjectVersionAndProperties newVersion = ovap.CloneCheckedOut();
 			newVersion.VersionData.ObjVer.Version++;
-			vault.checkedOut.Add( newVersion.ObjVer.ObjID );
+			vault.CheckedOut.Add( newVersion.ObjVer.ObjID );
 			vault.ovaps.Add( newVersion );
 			return newVersion.VersionData;
 		}

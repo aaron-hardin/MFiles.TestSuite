@@ -13,7 +13,7 @@ namespace MFiles.TestSuite.MockObjectModels
 {
     public class TestVault : Vault
     {
-		public IList<ObjID> checkedOut = new List<ObjID>(); 
+		public readonly IList<ObjID> CheckedOut = new List<ObjID>(); 
         public IList<TestObjectVersionAndProperties> ovaps = new List<TestObjectVersionAndProperties>(); 
         public IList<ValueListItem> valueListItems = new List<ValueListItem>(); 
         public IList<ObjTypeAdmin> objTypes = new List<ObjTypeAdmin>();
@@ -34,17 +34,30 @@ namespace MFiles.TestSuite.MockObjectModels
 
 		public MetricGatherer MetricGatherer = new MetricGatherer();
 
-        public TestVault()
+	    public TestVault()
+	    {
+	    }
+
+		/// <summary>
+		/// Takes a dictionary where key is configKey and value is path to Configuration.json
+		/// </summary>
+		/// <param name="configurations"></param>
+        public TestVault( Dictionary<string, string> configurations )
         {
             // TODO: setup config
-            //string approvalModuleConfigKey = new TaskModule().GetConfigKey();
-            //// Load configuration from named value storage.
-            //NamedValues namedValues = this.NamedValueStorageOperations.GetNamedValues(
-            //    MFNamedValueType.MFConfigurationValue, approvalModuleConfigKey);
-            //namedValues["configuration"] = GetDefaultConfiguration(approvalModuleConfigKey);
-            //// Put the collection back to the vaule.
-            //this.NamedValueStorageOperations.SetNamedValues(MFNamedValueType.MFConfigurationValue, approvalModuleConfigKey, namedValues);
-
+	        if( configurations != null )
+	        {
+		        foreach( KeyValuePair<string, string> config in configurations )
+		        {
+			        // Load configuration from named value storage.
+			        NamedValues values = NamedValueStorageOperations.GetNamedValues(
+						MFNamedValueType.MFConfigurationValue, config.Key);
+			        values[ "configuration" ] = GetDefaultConfiguration( config.Value );
+			        // Put the collection back to the vaule.
+			        NamedValueStorageOperations.SetNamedValues( MFNamedValueType.MFConfigurationValue,
+				        config.Key, values );
+		        }
+	        }
         }
 
         public static TestVault FromFile(string path)
@@ -110,16 +123,10 @@ namespace MFiles.TestSuite.MockObjectModels
             return testVault;
         }
 
-        private static string GetDefaultConfiguration(string configKey)
+        private static string GetDefaultConfiguration(string pathToConfig)
         {
-            string basePath = Directory.GetCurrentDirectory().Substring(0, Directory.GetCurrentDirectory().IndexOf("NUnitTests"));
-
-            basePath = Path.Combine(basePath, @"MFiles.Modules\Packaging\Debug\M-Files_Modules\DefaultConfiguration");
-
             // Get the default configuration.
-            string moduleDefaultConfigName = configKey + ".Configuration.json";
-
-            string pathToConfig = Path.Combine(basePath, moduleDefaultConfigName);
+            //configKey + ".Configuration.json";
 
             // Read the file and push it to the named value storage.
             StreamReader sr = new StreamReader(pathToConfig);
@@ -130,7 +137,7 @@ namespace MFiles.TestSuite.MockObjectModels
         public ObjectVersionAndProperties GetOvap(ObjVer objVer)
         {
             List<TestObjectVersionAndProperties> thisObj =
-                this.ovaps.Where(obj => obj.ObjVer.ID == objVer.ID && obj.ObjVer.Type == objVer.Type).ToList();
+                ovaps.Where(obj => obj.ObjVer.ID == objVer.ID && obj.ObjVer.Type == objVer.Type).ToList();
             if (thisObj.Count == 0)
                 return null;
             int lookupVersion = (objVer.Version == -1) ? thisObj.Max(obj => obj.ObjVer.Version) : objVer.Version;
@@ -142,7 +149,7 @@ namespace MFiles.TestSuite.MockObjectModels
         public ObjectVersionAndProperties GetOvap(ObjID objId)
         {
             List<TestObjectVersionAndProperties> thisObj =
-                this.ovaps.Where(obj => obj.ObjVer.ID == objId.ID && obj.ObjVer.Type == objId.Type).ToList();
+                ovaps.Where(obj => obj.ObjVer.ID == objId.ID && obj.ObjVer.Type == objId.Type).ToList();
             if (thisObj.Count == 0)
                 return null;
             int maxVersion = thisObj.Max(obj => obj.ObjVer.Version);
@@ -156,7 +163,7 @@ namespace MFiles.TestSuite.MockObjectModels
             get { throw new NotImplementedException(); }
         }
 
-        public void ChangePassword(string OldPassword, string NewPassword)
+        public void ChangePassword(string oldPassword, string newPassword)
         {
             throw new NotImplementedException();
         }
@@ -168,7 +175,7 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public VaultClassOperations ClassOperations
         {
-            get { return this.classOperations ?? (this.classOperations = new TestClassOperations(this)); }
+            get { return classOperations ?? (classOperations = new TestClassOperations(this)); }
         }
 
         public VaultClientOperations ClientOperations
@@ -176,12 +183,29 @@ namespace MFiles.TestSuite.MockObjectModels
             get { throw new NotImplementedException(); }
         }
 
-        public void CloneFrom(Vault pIVaultSource)
-        {
-            throw new NotImplementedException();
-        }
+	    public void CloneFrom( Vault pIVaultSource )
+	    {
+		    TestVault internalTestVault = ( TestVault ) pIVaultSource;
+		    ovaps = internalTestVault.ovaps;
+		    valueListItems = internalTestVault.valueListItems;
+		    objTypes = internalTestVault.objTypes;
+		    propertyDefs = internalTestVault.propertyDefs;
+		    workflows = internalTestVault.workflows;
+		    classes = internalTestVault.classes;
+		    namedValues = internalTestVault.namedValues;
 
-        public int CurrentLoggedInUserID
+		    objectOperations = internalTestVault.ObjectOperations;
+		    classOperations = internalTestVault.ClassOperations;
+		    objectPropertyOperations = internalTestVault.ObjectPropertyOperations;
+		    valueListItemOperations = internalTestVault.ValueListItemOperations;
+		    objectSearchOperations = internalTestVault.ObjectSearchOperations;
+		    objectTypeOperations = internalTestVault.ObjectTypeOperations;
+		    propertyDefOperations = internalTestVault.PropertyDefOperations;
+		    workflowOperations = internalTestVault.WorkflowOperations;
+		    namedValueStorageOperations = internalTestVault.NamedValueStorageOperations;
+	    }
+
+	    public int CurrentLoggedInUserID
         {
             get { throw new NotImplementedException(); }
         }
@@ -233,7 +257,7 @@ namespace MFiles.TestSuite.MockObjectModels
             throw new NotImplementedException();
         }
 
-        public bool LogOutWithDialogs(IntPtr ParentWindow)
+        public bool LogOutWithDialogs(IntPtr parentWindow)
         {
             throw new NotImplementedException();
         }
@@ -260,7 +284,7 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public VaultNamedValueStorageOperations NamedValueStorageOperations
         {
-            get { return this.namedValueStorageOperations ?? (this.namedValueStorageOperations = new TestNamedValueStorageOperations(this)); }
+            get { return namedValueStorageOperations ?? (namedValueStorageOperations = new TestNamedValueStorageOperations(this)); }
         }
 
         public VaultObjectFileOperations ObjectFileOperations
@@ -270,27 +294,27 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public VaultObjectOperations ObjectOperations
         {
-            get { return this.objectOperations ?? (this.objectOperations = new TestObjectOperations(this)); }
+            get { return objectOperations ?? (objectOperations = new TestObjectOperations(this)); }
         }
 
         public VaultObjectPropertyOperations ObjectPropertyOperations
         {
-            get { return this.objectPropertyOperations ?? (this.objectPropertyOperations = new TestObjectPropertyOperations(this)); }
+            get { return objectPropertyOperations ?? (objectPropertyOperations = new TestObjectPropertyOperations(this)); }
         }
 
         public VaultObjectSearchOperations ObjectSearchOperations
         {
-            get { return this.objectSearchOperations ?? (this.objectSearchOperations = new TestObjectSearchOperations(this)); }
+            get { return objectSearchOperations ?? (objectSearchOperations = new TestObjectSearchOperations(this)); }
         }
 
         public VaultObjectTypeOperations ObjectTypeOperations
         {
-            get { return this.objectTypeOperations ?? (this.objectTypeOperations = new TestObjectTypeOperations(this)); }
+            get { return objectTypeOperations ?? (objectTypeOperations = new TestObjectTypeOperations(this)); }
         }
 
         public VaultPropertyDefOperations PropertyDefOperations
         {
-            get { return this.propertyDefOperations ?? (this.propertyDefOperations = new TestPropertyDefOperations(this)); }
+            get { return propertyDefOperations ?? (propertyDefOperations = new TestPropertyDefOperations(this)); }
         }
 
         public bool ReadOnlyAccess
@@ -318,7 +342,7 @@ namespace MFiles.TestSuite.MockObjectModels
             throw new NotImplementedException();
         }
 
-        public void TestConnectionToVaultWithTimeout(int TimeoutInMilliseconds)
+        public void TestConnectionToVaultWithTimeout(int timeoutInMilliseconds)
         {
             throw new NotImplementedException();
         }
@@ -345,7 +369,7 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public VaultValueListItemOperations ValueListItemOperations
         {
-            get { return this.valueListItemOperations ?? (this.valueListItemOperations = new TestValueListItemOperations(this)); }
+            get { return valueListItemOperations ?? (valueListItemOperations = new TestValueListItemOperations(this)); }
         }
 
         public VaultValueListOperations ValueListOperations
@@ -365,7 +389,7 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public VaultWorkflowOperations WorkflowOperations
         {
-            get { return this.workflowOperations ?? (this.workflowOperations = new TestWorkflowOperations(this)); }
+            get { return workflowOperations ?? (workflowOperations = new TestWorkflowOperations(this)); }
         }
     }
 }

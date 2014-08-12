@@ -106,5 +106,35 @@ namespace MFiles.TestSuite.UnitTests
 
 			vault.MetricGatherer.PrintResults();
 		}
+
+		[Test]
+		public void CloneFrom()
+		{
+			Assembly current = Assembly.GetAssembly(typeof(Tools));
+			Stream stream = current.GetManifestResourceStream(typeof(Tools), "VaultStructure.json");
+
+			if (stream == null)
+				Assert.Fail("Failed to load stream.");
+
+			TestVault vault = TestVault.FromStream(stream);
+
+			PropertyValues pvs = new PropertyValues();
+			PropertyValue pv = new PropertyValue { PropertyDef = (int)MFBuiltInPropertyDef.MFBuiltInPropertyDefClass };
+			pv.TypedValue.SetValue(MFDataType.MFDatatypeLookup, 0);
+			pvs.Add(-1, pv);
+			vault.ObjectOperations.CreateNewObject(0, pvs);
+
+			Assert.AreEqual(1, vault.ovaps.Count, "Number of objects != 1");
+
+			TestVault clone = new TestVault();
+			clone.CloneFrom( vault );
+
+			Assert.AreEqual(1, vault.ovaps.Count, "After Clone::Number of objects should be 1.");
+
+			clone.ObjectOperations.CreateNewObject(0, pvs);
+
+			Assert.AreEqual(2, clone.ovaps.Count, "Clone does not have 2 objects");
+			Assert.AreEqual(2, vault.ovaps.Count, "Original does not have 2 objects");
+		}
     }
 }
