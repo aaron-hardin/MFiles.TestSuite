@@ -52,11 +52,16 @@ namespace MFiles.TestSuite.MockObjectModels
 	        }
         }
 
-        public Vault Vault { get; set; }
+        public Vault Vault {
+	        get { return testVault; }
+	        set { testVault = (TestVault)value; }
+        }
+
+	    private TestVault testVault;
 
         public ObjectVersion VersionData {
 	        get { return versionData; }
-	        set { versionData = new TestObjectVersion(value); }
+			set { versionData = new TestObjectVersion(value, testVault); }
         }
     }
 }

@@ -113,10 +113,9 @@ namespace MFiles.TestSuite.MockObjectModels
 			List<TestObjectVersionAndProperties> objThisType = vault.ovaps.Where( obj => obj.ObjVer.Type == objectType ).ToList();
 			if( objThisType.Count > 0 )
 				maxId = objThisType.Max( obj => obj.ObjVer.ID );
-			TestObjectVersion objectVersion = new TestObjectVersion
+			TestObjectVersion objectVersion = new TestObjectVersion(vault)
 			{
-				ObjVer = new ObjVer { Type = objectType, ID = maxId + 1, Version = 1 },
-				Class = propertyValues.SearchForProperty( 100 ).Value.GetLookupID()
+				ObjVer = new ObjVer { Type = objectType, ID = maxId + 1, Version = 1 }
 			};
 			TestObjectVersionAndProperties ovap = new TestObjectVersionAndProperties
 			{
@@ -307,7 +306,7 @@ namespace MFiles.TestSuite.MockObjectModels
 			if( objectVersionAndProperties == null )
 				return null;
 			TestObjectVersion objectVersion = ( TestObjectVersion )objectVersionAndProperties.VersionData;
-			objectVersion.Class = objectVersionAndProperties.Properties.SearchForProperty( 100 ).Value.GetLookupID();
+			//objectVersion.Class = objectVersionAndProperties.Properties.SearchForProperty( 100 ).Value.GetLookupID();
 			objectVersion.Title = objectVersionAndProperties.Properties.SearchForProperty( 0 ).GetValueAsLocalizedText();
 			return objectVersion;
 		}
@@ -337,7 +336,15 @@ namespace MFiles.TestSuite.MockObjectModels
 		{
 			vault.MetricGatherer.MethodCalled();
 
-			throw new NotImplementedException();
+			// TODO: use LatestVersion and UpdateFromServer
+			List<TestObjectVersionAndProperties> thisObj =
+				vault.ovaps.Where(obj => obj.ObjVer.ID == objVer.ID && obj.ObjVer.Type == objVer.Type).ToList();
+			if (thisObj.Count == 0)
+				return null;
+			int lookupVersion = (objVer.Version == -1) ? thisObj.Max(obj => obj.ObjVer.Version) : objVer.Version;
+			ObjectVersionAndProperties objectVersionAndProperties = thisObj.SingleOrDefault(obj => obj.ObjVer.Version == lookupVersion);
+			
+			return objectVersionAndProperties;
 		}
 
 		public ObjectVersions GetRelationships( ObjVer objVer, MFRelationshipsMode mode )

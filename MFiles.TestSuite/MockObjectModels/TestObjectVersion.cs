@@ -7,22 +7,24 @@ namespace MFiles.TestSuite.MockObjectModels
     {
 	    internal bool checkedOut;
 	    internal bool deleted;
+	    private TestVault vault;
 
-		internal TestObjectVersion(bool checkedOut)
+		internal TestObjectVersion(bool checkedOut, TestVault vault) : this(vault)
 		{
 			this.checkedOut = checkedOut;
 		}
 
-		public TestObjectVersion(ObjectVersion objectVersion)
+		internal TestObjectVersion(ObjectVersion objectVersion, TestVault vault)
+			: this(vault)
 		{
 			this.checkedOut = objectVersion.ObjectCheckedOut;
 			this.Title = objectVersion.Title;
 			this.ObjVer = objectVersion.ObjVer;
 		}
 
-		public TestObjectVersion()
+		internal TestObjectVersion(TestVault vault)
 		{
-
+			this.vault = vault;
 		}
 
         public DateTime AccessedByMeUtc
@@ -55,12 +57,22 @@ namespace MFiles.TestSuite.MockObjectModels
             get { throw new NotImplementedException(); }
         }
 
-        public int Class { get; set; }
+        public int Class
+		{
+	        get
+	        {
+		        ObjectVersionAndProperties ovap = vault.ObjectOperations.GetObjectVersionAndProperties( ObjVer );
+				return ovap.Properties.SearchForProperty( 100 ).Value.GetLookupID(); 
+			}
+		}
 
         public ObjectVersion Clone()
         {
             // TODO: far from comprehensive
-            TestObjectVersion clone = new TestObjectVersion { ObjVer = ObjVer.Clone() };
+            TestObjectVersion clone = new TestObjectVersion(vault)
+			{
+				ObjVer = ObjVer.Clone()
+			};
             return clone;
         }
 

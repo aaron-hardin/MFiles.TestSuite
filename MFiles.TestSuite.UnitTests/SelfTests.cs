@@ -35,11 +35,13 @@ namespace MFiles.TestSuite.UnitTests
 
 			PropertyValues pvs = new PropertyValues();
 			PropertyValue pv = new PropertyValue {PropertyDef = (int) MFBuiltInPropertyDef.MFBuiltInPropertyDefClass};
-		    pv.TypedValue.SetValue(MFDataType.MFDatatypeLookup, 0);
+		    pv.TypedValue.SetValue(MFDataType.MFDatatypeLookup, 115);
 			pvs.Add(-1, pv);
-		    vault.ObjectOperations.CreateNewObject(0, pvs);
+		    ObjectVersionAndProperties ovap = vault.ObjectOperations.CreateNewObject(0, pvs);
 
 			Assert.AreEqual(1, vault.ovaps.Count, "Number of objects != 1");
+
+			Assert.AreEqual( 115, ovap.VersionData.Class );
 	    }
 
 		[Test]
