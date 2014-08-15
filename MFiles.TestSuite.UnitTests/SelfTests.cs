@@ -138,5 +138,56 @@ namespace MFiles.TestSuite.UnitTests
 			Assert.AreEqual(2, clone.ovaps.Count, "Clone does not have 2 objects");
 			Assert.AreEqual(2, vault.ovaps.Count, "Original does not have 2 objects");
 		}
+
+		[Test]
+		public void Search()
+		{
+			Assembly current = Assembly.GetAssembly(typeof(Tools));
+			Stream stream = current.GetManifestResourceStream(typeof(Tools), "VaultStructure.json");
+
+			if (stream == null)
+				Assert.Fail("Failed to load stream.");
+
+			TestVault vault = TestVault.FromStream(stream);
+
+			PropertyValues pvs = new PropertyValues();
+			PropertyValue pv = new PropertyValue { PropertyDef = (int)MFBuiltInPropertyDef.MFBuiltInPropertyDefClass };
+			pv.TypedValue.SetValue(MFDataType.MFDatatypeLookup, 0);
+			pvs.Add(-1, pv);
+			vault.ObjectOperations.CreateNewObject(0, pvs);
+
+			Assert.AreEqual(1, vault.ovaps.Count, "Number of objects != 1");
+			const int testPropID = 55;
+			pv = new PropertyValue{ PropertyDef = testPropID };
+			const int testLookupID = 77;
+			pv.TypedValue.SetValue( MFDataType.MFDatatypeLookup, testLookupID );
+			pvs.Add( -1, pv );
+			vault.ObjectOperations.CreateNewObject(0, pvs);
+			Assert.AreEqual(2, vault.ovaps.Count, "Original does not have 2 objects");
+
+			SearchCondition c = new SearchCondition();
+			c.Expression.DataPropertyValuePropertyDef = testPropID;
+			c.ConditionType = MFConditionType.MFConditionTypeEqual;
+			c.TypedValue.SetValue(MFDataType.MFDatatypeLookup, testLookupID);
+			
+			SearchConditions search = new SearchConditions();
+			search.Add(-1, c);
+
+			ObjectSearchResults results = vault.ObjectSearchOperations.SearchForObjectsByConditionsEx( search,
+				MFSearchFlags.MFSearchFlagDisableRelevancyRanking, false );
+
+			Assert.AreEqual( 1, results.Count );
+
+			ObjectVersion ov = results[ 1 ];
+			
+			Assert.NotNull( ov );
+
+			ObjectVersions ovs = results.GetAsObjectVersions();
+
+			foreach( ObjectVersion result in ovs )
+			{
+				Assert.NotNull( result );
+			}
+		}
     }
 }

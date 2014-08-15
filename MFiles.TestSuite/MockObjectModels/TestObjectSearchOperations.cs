@@ -60,12 +60,59 @@ namespace MFiles.TestSuite.MockObjectModels
 		{
 			vault.MetricGatherer.MethodCalled();
 
-			throw new NotImplementedException();
+			if( searchFlags.HasFlag( MFSearchFlags.MFSearchFlagLookInAllVersions ) )
+			{
+				throw new NotImplementedException();
+			}
+			if (searchFlags.HasFlag(MFSearchFlags.MFSearchFlagReturnLatestVisibleVersion))
+			{
+				throw new NotImplementedException();
+			}
 
+			TestObjectSearchResults osr = new TestObjectSearchResults();
+
+			if(searchConditions.Count > 1)
+				throw new Exception("Currently only one condition is supported.");
+
+			foreach( SearchCondition searchCondition in searchConditions )
+			{
+				if (searchCondition.Expression.Type == MFExpressionType.MFExpressionTypePropertyValue)
+				{
+					int propId = searchCondition.Expression.DataPropertyValuePropertyDef;
+
+					foreach( TestObjectVersionAndProperties testOvap in vault.ovaps )
+					{
+						if(testOvap.Properties.IndexOf( propId ) != -1)
+						{
+							switch( searchCondition.TypedValue.DataType )
+							{
+								case MFDataType.MFDatatypeLookup:
+									if(searchCondition.TypedValue.GetLookupID() == testOvap.Properties.SearchForProperty( propId ).Value.GetLookupID())
+										osr.Add( testOvap );
+									break;
+								default:
+									throw new Exception("Datatype not yet supported in Search Conditions");
+							}
+							//if(searchCondition.TypedValue.Value == testOvap.Properties.SearchForProperty( propId ).Value.Value)
+							//{
+							//	osr.Add( testOvap );
+							//}
+						}
+					}
+					return osr;
+				}
+				else
+				{
+					throw new Exception("Expression Type not yet supported in SearchForObjects::"+searchCondition.Expression.Type);
+				}
+			}
+			
 			//if(SearchFlags != MFSearchFlags.MFSearchFlagNone)
 			//    throw new NotImplementedException();
 
 			//List<ObjectVersionAndProperties> objects = vault.ovaps.Where()
+
+			throw new NotImplementedException();
 		}
 
 		public XMLSearchResult SearchForObjectsByConditionsXML( SearchConditions searchConditions, bool sortResults )
