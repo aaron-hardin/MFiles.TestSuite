@@ -160,7 +160,10 @@ namespace MFiles.TestSuite.UnitTests
 			const int testPropID = 55;
 			pv = new PropertyValue{ PropertyDef = testPropID };
 			const int testLookupID = 77;
-			pv.TypedValue.SetValue( MFDataType.MFDatatypeLookup, testLookupID );
+			Lookups lks = new Lookups();
+			Lookup lk = new Lookup { Item = testLookupID, ObjectType = 0 };
+			lks.Add(-1, lk);
+			pv.TypedValue.SetValueToMultiSelectLookup( lks );
 			pvs.Add( -1, pv );
 			vault.ObjectOperations.CreateNewObject(0, pvs);
 			Assert.AreEqual(2, vault.ovaps.Count, "Original does not have 2 objects");
@@ -168,9 +171,15 @@ namespace MFiles.TestSuite.UnitTests
 			SearchCondition c = new SearchCondition();
 			c.Expression.DataPropertyValuePropertyDef = testPropID;
 			c.ConditionType = MFConditionType.MFConditionTypeEqual;
-			c.TypedValue.SetValue(MFDataType.MFDatatypeLookup, testLookupID);
+			c.TypedValue.SetValue( MFDataType.MFDatatypeLookup, testLookupID );
+
+			SearchCondition sc = new SearchCondition();
+			sc.Expression.SetStatusValueExpression(MFStatusType.MFStatusTypeDeleted);
+			sc.ConditionType = MFConditionType.MFConditionTypeEqual;
+			sc.TypedValue.SetValue(MFDataType.MFDatatypeBoolean, false);
 			
 			SearchConditions search = new SearchConditions();
+			search.Add(-1, sc);
 			search.Add(-1, c);
 
 			ObjectSearchResults results = vault.ObjectSearchOperations.SearchForObjectsByConditionsEx( search,

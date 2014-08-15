@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using MFilesAPI;
 
 namespace MFiles.TestSuite.MockObjectModels
@@ -69,50 +71,123 @@ namespace MFiles.TestSuite.MockObjectModels
 				throw new NotImplementedException();
 			}
 
-			TestObjectSearchResults osr = new TestObjectSearchResults();
-
-			if(searchConditions.Count > 1)
-				throw new Exception("Currently only one condition is supported.");
+			List<TestObjectVersionAndProperties> results = new List<TestObjectVersionAndProperties>(vault.ovaps);
 
 			foreach( SearchCondition searchCondition in searchConditions )
 			{
-				if (searchCondition.Expression.Type == MFExpressionType.MFExpressionTypePropertyValue)
+				List<TestObjectVersionAndProperties> remainingResults = new List<TestObjectVersionAndProperties>( results );
+				foreach( TestObjectVersionAndProperties testOvap in remainingResults )
 				{
-					int propId = searchCondition.Expression.DataPropertyValuePropertyDef;
-
-					foreach( TestObjectVersionAndProperties testOvap in vault.ovaps )
+					// Latest version only
+					List<TestObjectVersionAndProperties> thisObj =
+						vault.ovaps.Where( obj => obj.ObjVer.ID == testOvap.ObjVer.ID && obj.ObjVer.Type == testOvap.ObjVer.Type )
+							.ToList();
+					int maxVersion = thisObj.Max( obj => obj.ObjVer.Version );
+					if( testOvap.ObjVer.Version != maxVersion )
 					{
-						if(testOvap.Properties.IndexOf( propId ) != -1)
+						results.Remove( testOvap );
+						continue;
+					}
+
+					switch( searchCondition.Expression.Type )
+					{
+						case MFExpressionType.MFExpressionTypePropertyValue:
 						{
-							switch( searchCondition.TypedValue.DataType )
+							int propId = searchCondition.Expression.DataPropertyValuePropertyDef;
+
+							if( testOvap.Properties.IndexOf( propId ) != -1 )
 							{
-								case MFDataType.MFDatatypeLookup:
-									if(searchCondition.TypedValue.GetLookupID() == testOvap.Properties.SearchForProperty( propId ).Value.GetLookupID())
-										osr.Add( testOvap );
+								PropertyValue pv = testOvap.Properties.SearchForProperty( propId );
+								switch( searchCondition.TypedValue.DataType )
+								{
+									case MFDataType.MFDatatypeLookup:
+										if(pv.TypedValue.DataType == MFDataType.MFDatatypeMultiSelectLookup)
+										{
+											Lookups lks = pv.TypedValue.GetValueAsLookups();
+											bool exists = false;
+											foreach( Lookup lookup in lks )
+											{
+												if(lookup.Item == searchCondition.TypedValue.GetLookupID())
+												{
+													exists = true;
+												}
+											}
+											if(!exists)
+											{
+												results.Remove( testOvap );
+											}
+										}
+										else if( pv.TypedValue.DataType == MFDataType.MFDatatypeLookup )
+										{
+											if( searchCondition.TypedValue.GetLookupID()
+											    != testOvap.Properties.SearchForProperty( propId ).Value.GetLookupID() )
+												if( searchCondition.ConditionType == MFConditionType.MFConditionTypeEqual )
+												{
+													results.Remove( testOvap );
+												}
+												else
+												{
+													throw new Exception( "ConditionType not yet supported in Search Conditions :: DataType lookup" );
+												}
+										}
+										else
+										{
+											throw new Exception("Parameter incorrect");
+										}
+										break;
+									default:
+										throw new Exception( "Datatype not yet supported in Search Conditions" );
+								}
+								//if(searchCondition.TypedValue.Value == testOvap.Properties.SearchForProperty( propId ).Value.Value)
+								//{
+								//	osr.Add( testOvap );
+								//}
+							}
+							else
+							{
+								results.Remove(testOvap);
+							}
+						}
+							break;
+						case MFExpressionType.MFExpressionTypeStatusValue:
+							switch( searchCondition.ConditionType )
+							{
+								case MFConditionType.MFConditionTypeEqual:
+									switch( searchCondition.Expression.DataStatusValueType )
+									{
+										case MFStatusType.MFStatusTypeDeleted:
+											if(testOvap.VersionData.Deleted)
+											{
+												results.Remove(testOvap);
+											}
+											break;
+										default:
+											throw new Exception("MFStatusType not yet supported in Search Conditions for MFExpressionTypeStatusValue::MFConditionTypeEqual");
+									}
 									break;
 								default:
-									throw new Exception("Datatype not yet supported in Search Conditions");
+									throw new Exception( "ConditionType not yet supported in Search Conditions for MFExpressionTypeStatusValue" );
 							}
-							//if(searchCondition.TypedValue.Value == testOvap.Properties.SearchForProperty( propId ).Value.Value)
-							//{
-							//	osr.Add( testOvap );
-							//}
-						}
-					}
-					return osr;
-				}
-				else
-				{
-					throw new Exception("Expression Type not yet supported in SearchForObjects::"+searchCondition.Expression.Type);
-				}
-			}
-			
+							break;
+						default:
+							throw new Exception( "Expression Type not yet supported in SearchForObjects::" + searchCondition.Expression.Type );
+					}  // End Switch ExpressionType
+				}  // End iteration of objects
+			}  // End iteration of Search Conditions
+
 			//if(SearchFlags != MFSearchFlags.MFSearchFlagNone)
 			//    throw new NotImplementedException();
 
 			//List<ObjectVersionAndProperties> objects = vault.ovaps.Where()
 
-			throw new NotImplementedException();
+			TestObjectSearchResults osr = new TestObjectSearchResults();
+
+			foreach( TestObjectVersionAndProperties testOvap in results )
+			{
+				osr.Add( testOvap );
+			}
+
+			return osr;
 		}
 
 		public XMLSearchResult SearchForObjectsByConditionsXML( SearchConditions searchConditions, bool sortResults )
