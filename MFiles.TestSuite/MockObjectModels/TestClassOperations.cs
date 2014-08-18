@@ -20,7 +20,9 @@ namespace MFiles.TestSuite.MockObjectModels
 			vault.MetricGatherer.MethodCalled();
 
 			// TODO: make functionality comparable to API
-			vault.classes.Add( objectClassAdmin );
+			vault.classAdmins.Add( objectClassAdmin );
+			vault.classes.Add(new TestObjectClass(objectClassAdmin));
+
 			return objectClassAdmin;
 		}
 
@@ -42,7 +44,13 @@ namespace MFiles.TestSuite.MockObjectModels
 		{
 			vault.MetricGatherer.MethodCalled();
 
-			throw new NotImplementedException();
+			TestObjectClass objClass = vault.classes.FirstOrDefault( cl => cl.ID == objectClass );
+
+			if(objClass == null)
+			{
+				throw new Exception("Class not found: "+objectClass);
+			}
+			return objClass;
 		}
 
 		public ObjectClassAdmin GetObjectClassAdmin( int Class )
@@ -59,7 +67,7 @@ namespace MFiles.TestSuite.MockObjectModels
 			try
 			{
 				ObjectClassAdmin classAdmin =
-					vault.classes.SingleOrDefault( classy => classy.SemanticAliases.Value.Split( ';' ).Contains( alias ) );
+					vault.classAdmins.SingleOrDefault( classy => classy.SemanticAliases.Value.Split( ';' ).Contains( alias ) );
 				return classAdmin == null ? -1 : classAdmin.ID;
 			}
 			catch

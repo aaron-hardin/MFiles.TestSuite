@@ -7,6 +7,8 @@ namespace MFiles.TestSuite.MockObjectModels
     {
         public TestStateAdmin() { }
 
+		public TestStateAdmin(StateAdmin sa) : this(new xStateAdmin(sa)) { }
+
         public TestStateAdmin(xStateAdmin sa)
         {
             this.ActionAssignToUser = sa.ActionAssignToUser;

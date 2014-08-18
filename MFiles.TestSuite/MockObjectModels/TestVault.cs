@@ -15,24 +15,26 @@ namespace MFiles.TestSuite.MockObjectModels
     {
 		public readonly IList<ObjID> CheckedOut = new List<ObjID>(); 
         public IList<TestObjectVersionAndProperties> ovaps = new List<TestObjectVersionAndProperties>(); 
-        public IList<ValueListItem> valueListItems = new List<ValueListItem>(); 
+        public IList<TestValueListItem> ValueListItems = new List<TestValueListItem>(); 
         public IList<ObjTypeAdmin> objTypes = new List<ObjTypeAdmin>();
         public IList<PropertyDefAdmin> propertyDefs = new List<PropertyDefAdmin>();
-        public IList<WorkflowAdmin> workflows = new List<WorkflowAdmin>();
-        public IList<ObjectClassAdmin> classes = new List<ObjectClassAdmin>();
+        public IList<TestWorkflowAdmin> Workflows = new List<TestWorkflowAdmin>();
+        public IList<ObjectClassAdmin> classAdmins = new List<ObjectClassAdmin>();
+		public IList<TestObjectClass> classes = new List<TestObjectClass>();
         public Dictionary<string, NamedValues> namedValues = new Dictionary<string, NamedValues>();
 
         private VaultObjectOperations objectOperations;
         private VaultClassOperations classOperations;
         private VaultObjectPropertyOperations objectPropertyOperations;
         private VaultValueListItemOperations valueListItemOperations;
+		private VaultValueListOperations valueListOperations;
         private VaultObjectSearchOperations objectSearchOperations;
         private VaultObjectTypeOperations objectTypeOperations;
         private VaultPropertyDefOperations propertyDefOperations;
         private VaultWorkflowOperations workflowOperations;
         private VaultNamedValueStorageOperations namedValueStorageOperations;
 
-		public MetricGatherer MetricGatherer = new MetricGatherer();
+		public readonly MetricGatherer MetricGatherer = new MetricGatherer();
 
 	    public TestVault()
 	    {
@@ -101,7 +103,9 @@ namespace MFiles.TestSuite.MockObjectModels
                 List<xObjectClassAdmin> classes = JsonConvert.DeserializeObject<List<xObjectClassAdmin>>(vaultJson.Classes);
                 foreach (xObjectClassAdmin oClass in classes)
                 {
-                    testVault.classes.Add(new TestObjectClassAdmin(oClass));
+	                TestObjectClassAdmin toca = new TestObjectClassAdmin( oClass );
+                    testVault.classAdmins.Add( toca );
+					testVault.classes.Add(new TestObjectClass(toca));
                 }
 
                 List<xObjType> valueLists = JsonConvert.DeserializeObject<List<xObjType>>(vaultJson.ValueLists);
@@ -187,11 +191,11 @@ namespace MFiles.TestSuite.MockObjectModels
 	    {
 		    TestVault internalTestVault = ( TestVault ) pIVaultSource;
 		    ovaps = internalTestVault.ovaps;
-		    valueListItems = internalTestVault.valueListItems;
+		    ValueListItems = internalTestVault.ValueListItems;
 		    objTypes = internalTestVault.objTypes;
 		    propertyDefs = internalTestVault.propertyDefs;
-		    workflows = internalTestVault.workflows;
-		    classes = internalTestVault.classes;
+		    Workflows = internalTestVault.Workflows;
+		    classAdmins = internalTestVault.classAdmins;
 		    namedValues = internalTestVault.namedValues;
 
 		    objectOperations = internalTestVault.ObjectOperations;
@@ -374,7 +378,7 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public VaultValueListOperations ValueListOperations
         {
-            get { throw new NotImplementedException(); }
+			get { return valueListOperations ?? (valueListOperations = new TestValueListOperations(this)); }
         }
 
         public Languages VaultLanguages

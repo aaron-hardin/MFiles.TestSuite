@@ -8,22 +8,55 @@ namespace MFiles.TestSuite.MockObjectModels
     {
         public TestObjectClass() { }
 
+		public TestObjectClass(TestObjectClassAdmin oClass)
+		{
+			AssociatedPropertyDefs = new TestAssociatedPropertyDefs();
+			foreach (AssociatedPropertyDef associatedPropertyDef in oClass.AssociatedPropertyDefs)
+			{
+				AssociatedPropertyDefs.Add(-1, associatedPropertyDef);
+			}
+			AutomaticPermissionsForObjects = oClass.AutomaticPermissionsForObjects;
+			ForceWorkflow = oClass.ForceWorkflow;
+			ID = oClass.ID;
+			Name = oClass.Name;
+			NamePropertyDef = oClass.NamePropertyDef;
+			ObjectType = oClass.ObjectType;
+			Workflow = oClass.Workflow;
+		}
+
+		public TestObjectClass(ObjectClassAdmin oca)
+		{
+			xObjectClassAdmin oClass = new xObjectClassAdmin(oca);
+			AssociatedPropertyDefs = new AssociatedPropertyDefs();
+			foreach (xAssociatedPropertyDef associatedPropertyDef in oClass.AssociatedPropertyDefs)
+			{
+				AssociatedPropertyDefs.Add(-1, new TestAssociatedPropertyDef(associatedPropertyDef));
+			}
+			AutomaticPermissionsForObjects = new TestAutomaticPermissions(oClass.AutomaticPermissionsForObjects);
+			ForceWorkflow = oClass.ForceWorkflow;
+			ID = oClass.ID;
+			Name = oClass.Name;
+			NamePropertyDef = oClass.NamePropertyDef;
+			ObjectType = oClass.ObjectType;
+			Workflow = oClass.Workflow;
+		}
+
         public TestObjectClass(xObjectClass oClass) 
         {
-            this.ACLForObjects = new TestAccessControlList(oClass.ACLForObjects);
-            this.AccessControlList = new TestAccessControlList(oClass.AccessControlList);
-            this.AssociatedPropertyDefs = new AssociatedPropertyDefs();
+            ACLForObjects = new TestAccessControlList(oClass.ACLForObjects);
+            AccessControlList = new TestAccessControlList(oClass.AccessControlList);
+            AssociatedPropertyDefs = new AssociatedPropertyDefs();
             foreach (xAssociatedPropertyDef associatedPropertyDef in oClass.AssociatedPropertyDefs)
             {
-                this.AssociatedPropertyDefs.Add(-1, new TestAssociatedPropertyDef(associatedPropertyDef));
+                AssociatedPropertyDefs.Add(-1, new TestAssociatedPropertyDef(associatedPropertyDef));
             }
-            this.AutomaticPermissionsForObjects = new TestAutomaticPermissions(oClass.AutomaticPermissionsForObjects);
-            this.ForceWorkflow = oClass.ForceWorkflow;
-            this.ID = oClass.ID;
-            this.Name = oClass.Name;
-            this.NamePropertyDef = oClass.NamePropertyDef;
-            this.ObjectType = oClass.ObjectType;
-            this.Workflow = oClass.Workflow;
+            AutomaticPermissionsForObjects = new TestAutomaticPermissions(oClass.AutomaticPermissionsForObjects);
+            ForceWorkflow = oClass.ForceWorkflow;
+            ID = oClass.ID;
+            Name = oClass.Name;
+            NamePropertyDef = oClass.NamePropertyDef;
+            ObjectType = oClass.ObjectType;
+            Workflow = oClass.Workflow;
         }
 
         public AccessControlList ACLForObjects { get; set; }

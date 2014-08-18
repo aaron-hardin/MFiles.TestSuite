@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
+using MFiles.VaultJsonTools.ComModels;
 using MFilesAPI;
 
 namespace MFiles.TestSuite.MockObjectModels
 {
 	public class TestWorkflowOperations : VaultWorkflowOperations
 	{
-		private TestVault vault;
+		private readonly TestVault vault;
 
 		public TestWorkflowOperations( TestVault vault )
 		{
@@ -20,7 +21,16 @@ namespace MFiles.TestSuite.MockObjectModels
 			vault.MetricGatherer.MethodCalled();
 
 			// TODO: verify
-			vault.workflows.Add( workflow );
+			if( workflow is TestWorkflowAdmin )
+			{
+				vault.Workflows.Add((TestWorkflowAdmin)workflow);
+			}
+			else
+			{
+				xWorkflowAdmin wkAdmin = new xWorkflowAdmin( workflow );
+				TestWorkflowAdmin twka = new TestWorkflowAdmin( wkAdmin );
+				vault.Workflows.Add( twka );
+			}
 
 			ValueListItem valueListItemWorkflow = new ValueListItem { ID = workflow.Workflow.ID, Name = workflow.Workflow.Name };
 			vault.ValueListItemOperations.AddValueListItem( ( int )MFBuiltInValueList.MFBuiltInValueListWorkflows,
@@ -46,7 +56,7 @@ namespace MFiles.TestSuite.MockObjectModels
 		{
 			vault.MetricGatherer.MethodCalled();
 
-			return vault.workflows.SingleOrDefault( wf => wf.Workflow.ID == workflowID );
+			return vault.Workflows.SingleOrDefault( wf => wf.Workflow.ID == workflowID );
 			// TODO: verify
 		}
 
@@ -63,7 +73,7 @@ namespace MFiles.TestSuite.MockObjectModels
 
 			try
 			{
-				return vault.workflows.Single( wf => wf.SemanticAliases.Value.Split( ';' ).Contains( alias ) ).Workflow.ID;
+				return vault.Workflows.Single( wf => wf.SemanticAliases.Value.Split( ';' ).Contains( alias ) ).Workflow.ID;
 			}
 			catch
 			{
@@ -84,7 +94,7 @@ namespace MFiles.TestSuite.MockObjectModels
 
 			// TODO: verify
 			int stateId = -1;
-			foreach( WorkflowAdmin workflowAdmin in vault.workflows )
+			foreach( WorkflowAdmin workflowAdmin in vault.Workflows )
 			{
 				for( int i = 1; i <= workflowAdmin.States.Count; ++i )
 				{
@@ -110,7 +120,16 @@ namespace MFiles.TestSuite.MockObjectModels
 		{
 			vault.MetricGatherer.MethodCalled();
 
-			throw new NotImplementedException();
+			TestWorkflowAdmin workflowAdmin = vault.Workflows.FirstOrDefault( wf => wf.Workflow.ID == workflow );
+			
+			if(workflowAdmin == null)
+			{
+				throw new Exception( "Workflow not found. ID: " + workflow );
+			}
+
+			TestStates states = new TestStates(workflowAdmin.states);
+
+			return states;
 		}
 
 		public States GetWorkflowStatesEx( int workflow, TypedValue currentState = null, ObjVer objVer = null )

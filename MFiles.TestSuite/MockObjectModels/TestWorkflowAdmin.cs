@@ -8,22 +8,24 @@ namespace MFiles.TestSuite.MockObjectModels
     {
         public TestWorkflowAdmin() { }
 
+		public TestWorkflowAdmin(WorkflowAdmin wfa) : this(new xWorkflowAdmin(wfa)) {}
+
         public TestWorkflowAdmin(xWorkflowAdmin wfa) 
         {
-            this.Description = wfa.Description;
-            this.Permissions = new TestAccessControlList(wfa.Permissions);
-            this.SemanticAliases = new SemanticAliases { Value = string.Join(";", wfa.SemanticAliases) };
-            this.States = new StatesAdmin();
+            Description = wfa.Description;
+            Permissions = new TestAccessControlList(wfa.Permissions);
+            SemanticAliases = new SemanticAliases { Value = string.Join(";", wfa.SemanticAliases) };
+            States = new StatesAdmin();
             foreach (xStateAdmin stateAdmin in wfa.States)
             {
-                this.States.Add(-1, new TestStateAdmin(stateAdmin));
+                States.Add(-1, new TestStateAdmin(stateAdmin));
             }
-            this.StateTransitions = new StateTransitions();
+            StateTransitions = new StateTransitions();
             foreach (xStateTransition transition in wfa.StateTransitions)
             {
-                this.StateTransitions.Add(-1, new TestStateTransition(transition));
+                StateTransitions.Add(-1, new TestStateTransition(transition));
             }
-            this.Workflow = new TestWorkflow(wfa.Workflow);
+            Workflow = new TestWorkflow(wfa.Workflow);
         }
 
         public WorkflowAdmin Clone()
@@ -39,8 +41,14 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public StateTransitions StateTransitions { get; set; }
 
-        public StatesAdmin States { get; set; }
+	    internal TestStatesAdmin states;
 
-        public Workflow Workflow { get; set; }
+	    public StatesAdmin States
+	    {
+		    get { return states; }
+			set { states = new TestStatesAdmin(value);}
+	    }
+
+	    public Workflow Workflow { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MFilesAPI;
 
@@ -20,7 +21,7 @@ namespace MFiles.TestSuite.MockObjectModels
 			vault.MetricGatherer.MethodCalled();
 
 			valueListItem.ValueListID = valueList;
-			vault.valueListItems.Add( valueListItem );
+			vault.ValueListItems.Add(new TestValueListItem(valueListItem));
 			return valueListItem;
 		}
 
@@ -99,7 +100,7 @@ namespace MFiles.TestSuite.MockObjectModels
 			vault.MetricGatherer.MethodCalled();
 
 			ValueListItem item =
-				vault.valueListItems.SingleOrDefault( vli => vli.ValueListID == valueList && vli.ID == valueListItemID );
+				vault.ValueListItems.SingleOrDefault( vli => vli.ValueListID == valueList && vli.ID == valueListItemID );
 			return item;
 		}
 
@@ -114,7 +115,16 @@ namespace MFiles.TestSuite.MockObjectModels
 		{
 			vault.MetricGatherer.MethodCalled();
 
-			throw new NotImplementedException();
+			TestValueListItems results = new TestValueListItems();
+
+			List<TestValueListItem> items = vault.ValueListItems.Where( vli => vli.ValueListID == valueList ).ToList();
+
+			foreach( TestValueListItem testValueListItem in items )
+			{
+				results.Items.Add( testValueListItem );
+			}
+
+			return results;
 		}
 
 		public ValueListItems GetValueListItemsEx( int valueList, bool updateFromServer = false, MFExternalDBRefreshType refreshTypeIfExternalValueList = MFExternalDBRefreshType.MFExternalDBRefreshTypeNone, bool replaceCurrentUserWithCallersIdentity = true )

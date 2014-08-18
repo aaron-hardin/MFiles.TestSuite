@@ -6,9 +6,13 @@ namespace MFiles.TestSuite.MockObjectModels
 {
     public class TestObjectClassAdmin : ObjectClassAdmin
     {
-        public TestObjectClassAdmin() { }
+	    public TestObjectClassAdmin()
+	    {
+			TestAssociatedPropertyDefs = new TestAssociatedPropertyDefs();
+		    this.AssociatedPropertyDefs = new AssociatedPropertyDefs();
+	    }
 
-        public TestObjectClassAdmin(xObjectClassAdmin ocAdmin)
+	    public TestObjectClassAdmin(xObjectClassAdmin ocAdmin)
         {
             this.AssociatedPropertyDefs = new AssociatedPropertyDefs();
             foreach (xAssociatedPropertyDef propertyDef in ocAdmin.AssociatedPropertyDefs)
@@ -28,7 +32,11 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public AccessControlList ACLForObjects { get; set; }
 
-        public AssociatedPropertyDefs AssociatedPropertyDefs { get; set; }
+	    internal TestAssociatedPropertyDefs TestAssociatedPropertyDefs;
+        public AssociatedPropertyDefs AssociatedPropertyDefs {
+	        get { return TestAssociatedPropertyDefs; }
+	        set { TestAssociatedPropertyDefs = new TestAssociatedPropertyDefs(value);}
+        }
 
         public AutomaticPermissions AutomaticPermissionsForObjects { get; set; }
 

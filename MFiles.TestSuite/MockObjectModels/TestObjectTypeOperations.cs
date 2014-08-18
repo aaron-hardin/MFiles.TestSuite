@@ -77,7 +77,14 @@ namespace MFiles.TestSuite.MockObjectModels
 		{
 			vault.MetricGatherer.MethodCalled();
 
-			throw new NotImplementedException();
+			ObjTypeAdmin ota = vault.objTypes.FirstOrDefault( ot => ot.ObjectType.GUID == objectTypeGuid );
+
+			if(ota == null)
+			{
+				throw new Exception("Object Type not found: "+objectTypeGuid);
+			}
+
+			return ota.ObjectType.ID;
 		}
 
 		public ObjTypes GetObjectTypes()

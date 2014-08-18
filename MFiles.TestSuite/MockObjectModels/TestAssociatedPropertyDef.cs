@@ -7,6 +7,12 @@ namespace MFiles.TestSuite.MockObjectModels
     {
         public TestAssociatedPropertyDef() { }
 
+		public TestAssociatedPropertyDef(AssociatedPropertyDef apd)
+		{
+			this.PropertyDef = apd.PropertyDef;
+			this.Required = apd.Required;
+		}
+
         public TestAssociatedPropertyDef(xAssociatedPropertyDef apd) 
         {
             this.PropertyDef = apd.PropertyDef;
