@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using MFiles.TestSuite.MockObjectModels;
 using MFiles.VaultJsonTools;
@@ -197,6 +198,60 @@ namespace MFiles.TestSuite.UnitTests
 			{
 				Assert.NotNull( result );
 			}
+		}
+
+		[Test]
+		public void GetObjectInfo()
+		{
+			Assembly current = Assembly.GetAssembly(typeof(Tools));
+			Stream stream = current.GetManifestResourceStream(typeof(Tools), "VaultStructure.json");
+
+			if (stream == null)
+				Assert.Fail("Failed to load stream.");
+
+			TestVault vault = TestVault.FromStream(stream);
+
+			PropertyValues pvs = new PropertyValues();
+			PropertyValue pv = new PropertyValue { PropertyDef = (int)MFBuiltInPropertyDef.MFBuiltInPropertyDefClass };
+			pv.TypedValue.SetValue(MFDataType.MFDatatypeLookup, 0);
+			pvs.Add(-1, pv);
+			pv.PropertyDef = 0;
+			pv.TypedValue.SetValue( MFDataType.MFDatatypeText, "Title" );
+			pvs.Add( -1, pv );
+			ObjectVersionAndProperties ovap = vault.ObjectOperations.CreateNewObject(0, pvs);
+
+			ObjectVersion ov = vault.ObjectOperations.GetObjectInfo( ovap.ObjVer, false, true );
+			Assert.NotNull( ov );
+			Assert.AreEqual( "Title", ov.Title );
+		}
+
+		[Test]
+		public void ForceUndoCheckout()
+		{
+			Assembly current = Assembly.GetAssembly(typeof(Tools));
+			Stream stream = current.GetManifestResourceStream(typeof(Tools), "VaultStructure.json");
+
+			if (stream == null)
+				Assert.Fail("Failed to load stream.");
+
+			TestVault vault = TestVault.FromStream(stream);
+
+			PropertyValues pvs = new PropertyValues();
+			PropertyValue pv = new PropertyValue { PropertyDef = (int)MFBuiltInPropertyDef.MFBuiltInPropertyDefClass };
+			pv.TypedValue.SetValue(MFDataType.MFDatatypeLookup, 0);
+			pvs.Add(-1, pv);
+			pv.PropertyDef = 0;
+			pv.TypedValue.SetValue(MFDataType.MFDatatypeText, "Title");
+			pvs.Add(-1, pv);
+			ObjectVersionAndProperties ovap = vault.ObjectOperations.CreateNewObject(0, pvs);
+
+			Assert.Throws<Exception>( () => vault.ObjectOperations.ForceUndoCheckout( ovap.ObjVer ) );
+
+			ObjectVersion ov = vault.ObjectOperations.CheckOut( ovap.ObjVer.ObjID );
+			Assert.AreEqual( 2, ov.ObjVer.Version );
+
+			ov = vault.ObjectOperations.ForceUndoCheckout( ov.ObjVer );
+			Assert.AreEqual( 1, ov.ObjVer.Version );
 		}
     }
 }

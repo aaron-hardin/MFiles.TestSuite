@@ -193,7 +193,16 @@ namespace MFiles.TestSuite.MockObjectModels
 		{
 			vault.MetricGatherer.MethodCalled();
 
-			throw new NotImplementedException();
+			TestObjectVersionAndProperties ovap = GetLatestTestObjectVersionAndProperties(objVer.ObjID, true);
+			if( ovap == null )
+				throw new Exception( string.Format( "Object not found: ({0}-{1}-{2})", objVer.Type, objVer.ID, objVer.Version ) );
+			if( !ovap.versionData.checkedOut )
+				throw new Exception( string.Format( "Object not checked out: ({0}-{1}-{2})", objVer.Type, objVer.ID, objVer.Version ) );
+			vault.CheckedOut.Remove(objVer.ObjID);
+			vault.ovaps.Remove( ovap );
+
+			TestObjectVersionAndProperties prev = GetLatestTestObjectVersionAndProperties(objVer.ObjID, true);
+			return prev.VersionData;
 		}
 
 		public ObjectVersions GetCollectionMembers( ObjVer objVer )
