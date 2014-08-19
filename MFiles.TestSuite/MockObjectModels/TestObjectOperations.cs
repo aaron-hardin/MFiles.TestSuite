@@ -315,12 +315,15 @@ namespace MFiles.TestSuite.MockObjectModels
 			if( thisObj.Count == 0 )
 				return null;
 			int lookupVersion = ( objVer.Version == -1 ) ? thisObj.Max( obj => obj.ObjVer.Version ) : objVer.Version;
-			ObjectVersionAndProperties objectVersionAndProperties = thisObj.SingleOrDefault( obj => obj.ObjVer.Version == lookupVersion );
+			TestObjectVersionAndProperties objectVersionAndProperties = thisObj.SingleOrDefault(obj => obj.ObjVer.Version == lookupVersion);
 			if( objectVersionAndProperties == null )
-				return null;
-			TestObjectVersion objectVersion = ( TestObjectVersion )objectVersionAndProperties.VersionData;
+				throw new Exception("Parameter is invalid.");
+
+			TestObjectVersion objectVersion = objectVersionAndProperties.versionData;
+			
 			//objectVersion.Class = objectVersionAndProperties.Properties.SearchForProperty( 100 ).Value.GetLookupID();
-			objectVersion.Title = objectVersionAndProperties.Properties.SearchForProperty( 0 ).GetValueAsLocalizedText();
+			//objectVersion.Title = objectVersionAndProperties.Properties.SearchForProperty( 0 ).GetValueAsLocalizedText();
+			
 			return objectVersion;
 		}
 
@@ -350,13 +353,19 @@ namespace MFiles.TestSuite.MockObjectModels
 			vault.MetricGatherer.MethodCalled();
 
 			// TODO: use LatestVersion and UpdateFromServer
+			
+			return GetTestObjectVersionAndProperties( objVer, updateFromServer);
+		}
+
+		internal TestObjectVersionAndProperties GetTestObjectVersionAndProperties( ObjVer objVer, bool updateFromServer = false)
+		{
 			List<TestObjectVersionAndProperties> thisObj =
 				vault.ovaps.Where(obj => obj.ObjVer.ID == objVer.ID && obj.ObjVer.Type == objVer.Type).ToList();
 			if (thisObj.Count == 0)
-				return null;
+				throw new Exception(string.Format("Object not found: ({0}-{1}-{2})", objVer.Type, objVer.ID, objVer.Version));
 			int lookupVersion = (objVer.Version == -1) ? thisObj.Max(obj => obj.ObjVer.Version) : objVer.Version;
-			ObjectVersionAndProperties objectVersionAndProperties = thisObj.SingleOrDefault(obj => obj.ObjVer.Version == lookupVersion);
-			
+			TestObjectVersionAndProperties objectVersionAndProperties = thisObj.SingleOrDefault(obj => obj.ObjVer.Version == lookupVersion);
+
 			return objectVersionAndProperties;
 		}
 

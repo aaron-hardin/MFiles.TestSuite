@@ -18,7 +18,6 @@ namespace MFiles.TestSuite.MockObjectModels
 			: this(vault)
 		{
 			this.checkedOut = objectVersion.ObjectCheckedOut;
-			this.Title = objectVersion.Title;
 			this.ObjVer = objectVersion.ObjVer;
 		}
 
@@ -62,7 +61,7 @@ namespace MFiles.TestSuite.MockObjectModels
 	        get
 	        {
 		        ObjectVersionAndProperties ovap = vault.ObjectOperations.GetObjectVersionAndProperties( ObjVer );
-				return ovap.Properties.SearchForProperty( 100 ).Value.GetLookupID(); 
+				return ovap.Properties.SearchForProperty( 100 ).Value.GetLookupID();
 			}
 		}
 
@@ -227,7 +226,14 @@ namespace MFiles.TestSuite.MockObjectModels
             get { throw new NotImplementedException(); }
         }
 
-        public string Title { get; set; }
+        public string Title
+		{
+			get
+			{
+				TestObjectVersionAndProperties ovap = vault.TestObjectOperations.GetTestObjectVersionAndProperties(ObjVer);
+				return (string)ovap.Properties.SearchForProperty(0).Value.Value;
+			}
+		}
 
         public string VersionGUID
         {

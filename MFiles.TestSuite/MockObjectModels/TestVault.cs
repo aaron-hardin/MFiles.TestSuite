@@ -23,7 +23,7 @@ namespace MFiles.TestSuite.MockObjectModels
 		public IList<TestObjectClass> classes = new List<TestObjectClass>();
         public Dictionary<string, NamedValues> namedValues = new Dictionary<string, NamedValues>();
 
-        private VaultObjectOperations objectOperations;
+        internal TestObjectOperations TestObjectOperations;
         private VaultClassOperations classOperations;
         private VaultObjectPropertyOperations objectPropertyOperations;
         private VaultValueListItemOperations valueListItemOperations;
@@ -198,7 +198,7 @@ namespace MFiles.TestSuite.MockObjectModels
 		    classAdmins = internalTestVault.classAdmins;
 		    namedValues = internalTestVault.namedValues;
 
-		    objectOperations = internalTestVault.ObjectOperations;
+		    TestObjectOperations = internalTestVault.TestObjectOperations;
 		    classOperations = internalTestVault.ClassOperations;
 		    objectPropertyOperations = internalTestVault.ObjectPropertyOperations;
 		    valueListItemOperations = internalTestVault.ValueListItemOperations;
@@ -298,7 +298,7 @@ namespace MFiles.TestSuite.MockObjectModels
 
         public VaultObjectOperations ObjectOperations
         {
-            get { return objectOperations ?? (objectOperations = new TestObjectOperations(this)); }
+            get { return TestObjectOperations ?? (TestObjectOperations = new TestObjectOperations(this)); }
         }
 
         public VaultObjectPropertyOperations ObjectPropertyOperations
