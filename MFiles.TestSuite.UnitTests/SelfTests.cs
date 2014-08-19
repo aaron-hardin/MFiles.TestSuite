@@ -226,6 +226,32 @@ namespace MFiles.TestSuite.UnitTests
 		}
 
 		[Test]
+		public void Checkout()
+		{
+			Assembly current = Assembly.GetAssembly(typeof(Tools));
+			Stream stream = current.GetManifestResourceStream(typeof(Tools), "VaultStructure.json");
+
+			if (stream == null)
+				Assert.Fail("Failed to load stream.");
+
+			TestVault vault = TestVault.FromStream(stream);
+
+			PropertyValues pvs = new PropertyValues();
+			PropertyValue pv = new PropertyValue { PropertyDef = (int)MFBuiltInPropertyDef.MFBuiltInPropertyDefClass };
+			pv.TypedValue.SetValue(MFDataType.MFDatatypeLookup, 0);
+			pvs.Add(-1, pv);
+			pv.PropertyDef = 0;
+			pv.TypedValue.SetValue(MFDataType.MFDatatypeText, "Title");
+			pvs.Add(-1, pv);
+			ObjectVersionAndProperties ovap = vault.ObjectOperations.CreateNewObject(0, pvs);
+
+			ObjectVersion ov = vault.ObjectOperations.CheckOut(ovap.ObjVer.ObjID);
+			Assert.AreEqual(2, ov.ObjVer.Version);
+
+			Assert.Throws<Exception>( () => vault.ObjectOperations.CheckOut( ovap.ObjVer.ObjID ) );
+		}
+
+		[Test]
 		public void ForceUndoCheckout()
 		{
 			Assembly current = Assembly.GetAssembly(typeof(Tools));

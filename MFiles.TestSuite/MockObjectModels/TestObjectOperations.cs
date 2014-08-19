@@ -69,6 +69,10 @@ namespace MFiles.TestSuite.MockObjectModels
 
 			// TODO: finish method
 			TestObjectVersionAndProperties ovap = GetLatestTestObjectVersionAndProperties( objID, false );
+
+			if (ovap.versionData.checkedOut)
+				throw new Exception(string.Format("Object checked out: ({0}-{1}-{2})", ovap.ObjVer.Type, ovap.ObjVer.ID, ovap.ObjVer.Version));
+			
 			TestObjectVersionAndProperties newVersion = ovap.CloneCheckedOut();
 			newVersion.VersionData.ObjVer.Version++;
 			vault.CheckedOut.Add( newVersion.ObjVer.ObjID );
