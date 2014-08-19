@@ -161,6 +161,12 @@ namespace MFiles.TestSuite.MockObjectModels
 												results.Remove(testOvap);
 											}
 											break;
+										case MFStatusType.MFStatusTypeObjectTypeID:
+											if(testOvap.ObjVer.Type != searchCondition.TypedValue.GetLookupID())
+											{
+												results.Remove( testOvap );
+											}
+											break;
 										default:
 											throw new Exception("MFStatusType not yet supported in Search Conditions for MFExpressionTypeStatusValue::MFConditionTypeEqual");
 									}

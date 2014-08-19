@@ -198,6 +198,21 @@ namespace MFiles.TestSuite.UnitTests
 			{
 				Assert.NotNull( result );
 			}
+
+			vault.ObjectOperations.CreateNewObject( 2, pvs );
+			results = vault.ObjectSearchOperations.SearchForObjectsByConditionsEx(search,
+				MFSearchFlags.MFSearchFlagDisableRelevancyRanking, false);
+			Assert.AreEqual(2, results.Count);
+
+			sc = new SearchCondition();
+			sc.Expression.SetStatusValueExpression(MFStatusType.MFStatusTypeObjectTypeID);
+			sc.ConditionType = MFConditionType.MFConditionTypeEqual;
+			sc.TypedValue.SetValue(MFDataType.MFDatatypeLookup, 0);
+			search.Add( -1, sc );
+
+			results = vault.ObjectSearchOperations.SearchForObjectsByConditionsEx(search,
+				MFSearchFlags.MFSearchFlagDisableRelevancyRanking, false);
+			Assert.AreEqual(1, results.Count);
 		}
 
 		[Test]
