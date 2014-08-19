@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using MFilesAPI;
 
 namespace MFiles.TestSuite.MockObjectModels
@@ -11,6 +8,25 @@ namespace MFiles.TestSuite.MockObjectModels
 		public byte [] GetIconAsPNG( int Width, int Height )
 		{
 			throw new NotImplementedException();
+		}
+
+		internal TestValueListItem(TestObjectVersionAndProperties vli)
+		{
+			// TODO: commented properties.
+			ID = vli.ObjVer.ID;
+			ValueListID = vli.ObjVer.Type;
+			Name = vli.versionData.Title;
+			//HasParent = vli.HasParent;
+			//ParentID = vli.ParentID;
+			//HasOwner = vli.HasOwner;
+			//OwnerID = vli.OwnerID;
+			//DisplayID = vli.versionData.DisplayID;
+			//DisplayIDAvailable = vli.versionData.DisplayIDAvailable;
+			//ACLForObjects = vli.ACLForObjects;
+			//Icon = vli.Icon;
+			//AutomaticPermissionsForObjects = vli.AutomaticPermissionsForObjects;
+			//ItemGUID = vli.versionData.ObjectGUID;
+			Deleted = vli.versionData.Deleted;
 		}
 
 		public TestValueListItem(ValueListItem vli)

@@ -99,9 +99,18 @@ namespace MFiles.TestSuite.MockObjectModels
 		{
 			vault.MetricGatherer.MethodCalled();
 
-			ValueListItem item =
-				vault.ValueListItems.SingleOrDefault( vli => vli.ValueListID == valueList && vli.ID == valueListItemID );
-			return item;
+			ObjTypeAdmin ota = vault.objTypes.FirstOrDefault(vl => vl.ObjectType.ID == valueList);
+
+			if(ota == null)
+				throw new Exception("Value list not found: "+valueList);
+
+			if( !ota.ObjectType.RealObjectType )
+				return vault.ValueListItems.SingleOrDefault( vli => vli.ValueListID == valueList && vli.ID == valueListItemID );
+			
+			TestObjectVersionAndProperties ovap = vault.ovaps.FirstOrDefault( ov => ov.ObjVer.Type == valueList && ov.ObjVer.ID == valueListItemID );
+			if(ovap == null)
+				throw new Exception("Item not found: "+valueListItemID);
+			return new TestValueListItem( ovap );
 		}
 
 		public ValueListItem GetValueListItemByIDEx( int valueList, int valueListItemID, bool replaceCurrentUserWithCallersIdentity = true )
