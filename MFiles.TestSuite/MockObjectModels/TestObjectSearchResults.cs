@@ -63,5 +63,10 @@ namespace MFiles.TestSuite.MockObjectModels
 		{
 			throw new NotImplementedException();
 		}
+
+		public ObjectSearchResults Clone()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

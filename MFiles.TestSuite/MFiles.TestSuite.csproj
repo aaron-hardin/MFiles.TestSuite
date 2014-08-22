@@ -120,6 +120,9 @@
     <EmbeddedResource Include="VaultStructure.json" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <COMReference Include="MFilesAPI">
       <Guid>{B9C079AA-92DD-4FB4-A0E0-AA3198955B45}</Guid>
       <VersionMajor>1</VersionMajor>
@@ -129,9 +132,6 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
