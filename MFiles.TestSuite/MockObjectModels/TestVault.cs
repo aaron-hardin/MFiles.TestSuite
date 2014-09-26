@@ -81,53 +81,57 @@ namespace MFiles.TestSuite.MockObjectModels
             }
         }
 
-        public static TestVault FromStream(Stream stream)
-        {
-            TestVault testVault = new TestVault();
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                string serialized = reader.ReadToEnd();
-                VaultJSON vaultJson = JsonConvert.DeserializeObject<VaultJSON>(serialized);
-                List<xObjTypeAdmin> objects = JsonConvert.DeserializeObject<List<xObjTypeAdmin>>(vaultJson.Objects);
-                foreach (xObjTypeAdmin obj in objects)
-                {
-                    testVault.objTypes.Add(new TestObjTypeAdmin(obj));
-                }
+	    public static TestVault FromStream(Stream stream)
+	    {
+		    TestVault testVault = new TestVault();
+		    string serialized;
 
-                List<xPropertyDefAdmin> properties = JsonConvert.DeserializeObject<List<xPropertyDefAdmin>>(vaultJson.Properties);
-                foreach (xPropertyDefAdmin pda in properties)
-                {
-                    testVault.propertyDefs.Add(new TestPropertyDefAdmin(pda));
-                }
+			using (StreamReader reader = new StreamReader(stream))
+		    {
+			    serialized = reader.ReadToEnd();
+		    }
 
-                List<xObjectClassAdmin> classes = JsonConvert.DeserializeObject<List<xObjectClassAdmin>>(vaultJson.Classes);
-                foreach (xObjectClassAdmin oClass in classes)
-                {
-	                TestObjectClassAdmin toca = new TestObjectClassAdmin( oClass );
-                    testVault.classAdmins.Add( toca );
-					testVault.classes.Add(new TestObjectClass(toca));
-                }
+		    VaultJSON vaultJson = JsonConvert.DeserializeObject<VaultJSON>(serialized);
+			
+		    List<xObjTypeAdmin> objects = vaultJson.Objects;
+		    foreach (xObjTypeAdmin obj in objects)
+		    {
+			    testVault.objTypes.Add(new TestObjTypeAdmin(obj));
+		    }
 
-                List<xObjType> valueLists = JsonConvert.DeserializeObject<List<xObjType>>(vaultJson.ValueLists);
-                foreach (xObjType valueList in valueLists)
-                {
-                    TestObjType ot = new TestObjType(valueList);
-                    TestObjTypeAdmin ota = new TestObjTypeAdmin { ObjectType = ot };
-                    testVault.objTypes.Add(ota);
-                }
+		    List<xPropertyDefAdmin> properties = vaultJson.Properties;
+		    foreach (xPropertyDefAdmin pda in properties)
+		    {
+			    testVault.propertyDefs.Add(new TestPropertyDefAdmin(pda));
+		    }
 
-                List<xWorkflowAdmin> workflows = JsonConvert.DeserializeObject<List<xWorkflowAdmin>>(vaultJson.Workflows);
-                foreach (xWorkflowAdmin workflow in workflows)
-                {
-                    //testVault.workflows.Add(new TestWorkflowAdmin(workflow));
-                    testVault.WorkflowOperations.AddWorkflowAdmin(new TestWorkflowAdmin(workflow));
-                }
-            }
+		    List<xObjectClassAdmin> classes = vaultJson.Classes;
+		    foreach (xObjectClassAdmin oClass in classes)
+		    {
+			    TestObjectClassAdmin toca = new TestObjectClassAdmin(oClass);
+			    testVault.classAdmins.Add(toca);
+			    testVault.classes.Add(new TestObjectClass(toca));
+		    }
 
-            return testVault;
-        }
+		    List<xObjType> valueLists = vaultJson.ValueLists;
+		    foreach (xObjType valueList in valueLists)
+		    {
+			    TestObjType ot = new TestObjType(valueList);
+			    TestObjTypeAdmin ota = new TestObjTypeAdmin {ObjectType = ot};
+			    testVault.objTypes.Add(ota);
+		    }
 
-        private static string GetDefaultConfiguration(string pathToConfig)
+		    List<xWorkflowAdmin> workflows = vaultJson.Workflows;
+		    foreach (xWorkflowAdmin workflow in workflows)
+		    {
+			    //testVault.workflows.Add(new TestWorkflowAdmin(workflow));
+			    testVault.WorkflowOperations.AddWorkflowAdmin(new TestWorkflowAdmin(workflow));
+		    }
+
+		    return testVault;
+	    }
+
+	    private static string GetDefaultConfiguration(string pathToConfig)
         {
             // Get the default configuration.
             //configKey + ".Configuration.json";

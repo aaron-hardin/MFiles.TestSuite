@@ -33,7 +33,7 @@
   <ItemGroup>
     <Reference Include="MFiles.VaultJsonTools, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MFiles.VaultJsonTools.1.1.0\lib\net40\MFiles.VaultJsonTools.dll</HintPath>
+      <HintPath>..\packages\MFiles.VaultJsonTools.2.0.3\lib\net40\MFiles.VaultJsonTools.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -120,7 +120,9 @@
     <EmbeddedResource Include="VaultStructure.json" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="MFilesAPI">
